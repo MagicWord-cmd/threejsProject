@@ -1,0 +1,10 @@
+/*  boody样式，隐藏边线和滚动条 */
+body {
+
+  /*隐藏滚动条*/
+  overflow: hidden;
+
+  /*移除边线*/
+  margin: 0;
+  
+}

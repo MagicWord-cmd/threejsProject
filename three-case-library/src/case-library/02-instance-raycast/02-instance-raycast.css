@@ -1,0 +1,19 @@
+/*  boody样式，隐藏边线和滚动条 */
+body {
+
+  /*隐藏滚动条*/
+  overflow: hidden;
+
+  /*移除边线*/
+  margin: 0;
+  
+}
+
+/*  div.status属性，设置分数计数板样式  */
+div.status {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 90px;
+  color: white;
+}

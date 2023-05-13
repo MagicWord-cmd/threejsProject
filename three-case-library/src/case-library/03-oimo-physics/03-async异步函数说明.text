@@ -1,0 +1,284 @@
+异步函数async
+
+前端备忘录
+
+于 2022-08-22 16:20:00 发布
+
+3457
+ 收藏 26
+分类专栏： 前端知识点 文章标签： 前端
+版权
+
+华为云开发者联盟
+该内容已被华为云开发者联盟社区收录
+加入社区
+
+前端知识点
+专栏收录该内容
+1 篇文章0 订阅
+订阅专栏
+什么是同步异步
+在最新的ES7（ES2017）中提出的前端异步特性：async、await。
+在了解async和await之前得先明白什么是同步函数，什么是异步函数。
+
+同步函数：当一个函数是同步执行时，那么当该函数被调用时不会立即返回，直到该函数所要做的事情全都做完了才返回。比如说在银行排队办理业务，要等到前面一个人办完才能到下一个。
+异步函数：如果一个异步函数被调用时，该函数会立即返回尽管该函数规定的操作任务还没有完成。比如一个人边吃饭，边看手机，边说话，就是异步处理的方式。
+async
+async从字面意思上很好理解，是异步的意思，async用于申明一个function是异步的，函数返回的是一个promise。
+
+async作为关键字放到函数前面，用于表示函数是一个异步函数。该函数的执行不会阻塞后面代码的执行。
+async函数返回的是一个promise对象，可以调用then方法获取到promise的结果值。
+async function f() { 
+    return 1; 
+} 
+f().then((res) => { 
+    console.log(res) 
+}) //1
+
+async函数会返回一个promise对象，如果function中返回的是一个值，async直接会用Promise.resolve()包裹一下返回。
+
+await
+await有等待的意思，等待一个异步方法执行完成。
+
+await关键字只能放async函数里面。 而async函数里不是必须有await。
+await关键字的返回结果就是其后 promise执行的结果值，是resolved或者 rejected后的值。
+function getSomething() { 
+    return "something"; 
+} 
+
+async function testAsync() { 
+    return Promise.resolve("hello async"); 
+} 
+
+async function test() { 
+    const v1 = await getSomething(); 
+    const v2 = await testAsync(); 
+    console.log(v1, v2); 
+} 
+test(); // something hello async 
+
+为什么await关键词只能在async函数中用
+await操作符等的是一个返回的结果，那么如果是同步的情况，那就直接返回了。
+
+那如果是异步的情况呢，异步的情况下，await会阻塞整一个流程，直到结果返回之后，才会继续下面的代码。
+
+阻塞代码是一个很可怕的事情，而async函数，会被包在一个promise中，异步去执行。所以await只能在async函数中使用，如果在正常程序中使用，会造成整个程序阻塞，得不偿失。
+
+async/await
+异步代码就像写同步代码一样，也避免了回调地狱。
+
+串行：等待前面一个await执行后接着执行下一个await，以此类推
+async function asyncAwaitFn(str) {
+    return await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(str)
+        }, 1000);
+    })
+}
+
+const serialFn = async () => { //串行执行
+    console.log(await asyncAwaitFn('string 1'));
+    console.log(await asyncAwaitFn('string 2'));
+    console.timeEnd('serialFn ')
+}
+
+serialFn();
+
+
+
+并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作
+async function asyncAwaitFn(str) {
+    return await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(str)
+        }, 1000);
+    })
+}
+const parallel = async () => { //并行执行
+    const parallelOne = asyncAwaitFn('string 1');
+    const parallelTwo = asyncAwaitFn('string 2')
+
+    //直接打印
+    console.log(await parallelOne)
+    console.log(await parallelTwo)
+    console.timeEnd('parallel')
+}
+parallel()
+
+
+
+async、await错误处理
+在Promise中当请求reject的时候我们可以使用catch。为了保持代码的健壮性使用async、await的时候我们使用try catch来处理错误。
+
+async function catchErr() {
+	try {
+		const errRes = await new Promise((resolve, reject) => {
+			setTimeout(() => {
+				reject("http error...");
+			}, 1000);
+		);
+		//平常我们也可以在await请求成功后通过判断当前status是不是200来判断请求是否成功
+		// console.log(errRes.status, errRes.statusText);
+        } catch(err) {
+        	console.log(err);
+        }
+}
+catchErr(); //http error...
+
+虽然async、await也使用到了Promise但是却减少了Promise的then处理使得整个异步请求代码清爽了许多。
+
+前面扯了这么多，也是时候回到正题了，我们先来看下面的一个例子。
+我们需要做一个功能，在页面加载的时候实现查询三组数据：查询用户、查询朋友、查询图片。
+
+class Api {
+  constructor () {
+    this.user = { id: 1, name: 'test' }
+    this.friends = [ this.user, this.user, this.user ]
+    this.photo = 'not a real photo'
+  }
+
+  getUser () {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(this.user), 200)
+    })
+  }
+
+  getFriends (userId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(this.friends.slice()), 200)
+    })
+  }
+
+  getPhoto (userId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(this.photo), 200)
+    })
+  }
+
+  throwError () {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => reject(new Error('Intentional Error')), 200)
+    })
+  }
+}
+
+在上面定义了API的类，里面写了三个封装的查询接口。现在要依次执行那三个操作。
+第一种方法：Promises的嵌套：
+
+function callbackHell () {
+  const api = new Api()
+  let user, friends
+  api.getUser().then(function (returnedUser) {
+    user = returnedUser
+    api.getFriends(user.id).then(function (returnedFriends) {
+      friends = returnedFriends
+      api.getPhoto(user.id).then(function (photo) {
+        console.log('callbackHell', { user, friends, photo })
+      })
+    })
+  })
+}
+
+从上面可以看出，这代码块很简单，但它有很长、很深的嵌套。
+
+这只是简单的函数内容，但在真实的代码库中，每个回调函数可能会很长的代码，这就可能会导致代码变得庞大难读懂。处理此类代码，在回调内的回调中使用回调，通常称为“回调地狱”。
+
+更糟糕的是，没有错误检查，因此任何回调都可能作为未处理的resove/reject而失败。
+第二种方法：Promises链：
+
+function promiseChain () {
+  const api = new Api()
+  let user, friends
+  api.getUser()
+    .then((returnedUser) => {
+      user = returnedUser
+      return api.getFriends(user.id)
+    })
+    .then((returnedFriends) => {
+      friends = returnedFriends
+      return api.getPhoto(user.id)
+    })
+    .then((photo) => {
+      console.log('promiseChain', { user, friends, photo })
+    })
+}
+
+Promises的一个不错的功能是，可以通过在每个回调中返回另一个Promises来链接它们。这样，我们可以将所有回调保持在相同的缩进级别。我们还可以使用箭头函数来简化回调函数的声明。
+
+当然，此变体比第一种易于阅读，并且有更好的顺序感，但是，仍然很冗长且看起来复杂。
+第三种方法 async/await：
+
+async function asyncAwaitIsYourNewBestFriend () {
+  const api = new Api()
+  const user = await api.getUser()
+  const friends = await api.getFriends(user.id)
+  const photo = await api.getPhoto(user.id)
+  console.log('asyncAwaitIsYourNewBestFriend', { user, friends, photo })
+}
+
+现在看起来，好多了。
+
+在Promises之前调用“await”关键字暂停函数的流程，知道Promises被解决，并将结果分配给等号左侧的变量。这样，我们可以对异步操作流程进行编程，就好像它是普通的同步命令系列一样。
+
+上面的例子比较简单实现，下面我们继续讲下一个例子。
+
+现在有一个功能，要获取一个用户的朋友的朋友列表。
+
+第一种方法：递归Promises循环：
+
+function promiseLoops () {  
+  const api = new Api()
+  api.getUser()
+    .then((user) => {
+      return api.getFriends(user.id)
+    })
+    .then((returnedFriends) => {
+      const getFriendsOfFriends = (friends) => {
+        if (friends.length > 0) {
+          let friend = friends.pop()
+          return api.getFriends(friend.id)
+            .then((moreFriends) => {
+              console.log('promiseLoops', moreFriends)
+              return getFriendsOfFriends(friends)
+            })
+        }
+      }
+      return getFriendsOfFriends(returnedFriends)
+    })
+}
+
+我们正在创建一个内部函数，该函数已递归的方式来获取Promises，知道列表为空。虽然它具有完整的功能，但这只是对于简单的任务来说。
+
+第二种方法：async/await循环：
+
+async function asyncAwaitLoops () {
+  const api = new Api()
+  const user = await api.getUser()
+  const friends = await api.getFriends(user.id)
+
+  for (let friend of friends) {
+    let moreFriends = await api.getFriends(friend.id)
+    console.log('asyncAwaitLoops', moreFriends)
+  }
+}
+
+无需编写任何递归的Promises闭包。只是一个循环。
+
+同步操作
+逐个列出每个用户的朋友的朋友有点慢？为什么不并行进行呢？
+
+我们依然可以使用async和await来解决。
+
+async function asyncAwaitLoopsParallel () {
+  const api = new Api()
+  const user = await api.getUser()
+  const friends = await api.getFriends(user.id)
+  const friendPromises = friends.map(friend => api.getFriends(friend.id))
+  const moreFriends = await Promise.all(friendPromises)
+  console.log('asyncAwaitLoopsParallel', moreFriends)
+}
+
+并并行运行操作，就要形成运行的Promises数组，并将其作为参数传递给Promise.all()。这将返回一个等待的Promise，一旦所有操作完成，就会返回。
+————————————————
+版权声明：本文为CSDN博主「前端备忘录」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/baidu_39009276/article/details/126466836
