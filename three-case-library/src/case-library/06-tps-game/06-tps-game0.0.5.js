@@ -364,6 +364,7 @@ function getSideVoctor() {
 
 /*    相机防穿墙    */
 function cameraAdaptive() {
+	console.log(scene);
 	const raycaster = new THREE.Raycaster();
 	let cameraWorldDriection = new THREE.Vector3();
 	camera.getWorldDirection(cameraWorldDriection);
@@ -371,7 +372,7 @@ function cameraAdaptive() {
 	//todo从cameraControls的位置，指向摄像机的方向做射线检测
 	raycaster.set(cameraControls.position, raycasterDriection)
 	//检测对象为scene.children[6]
-	const intersection = raycaster.intersectObject(scene.children[6]);
+	const intersection = raycaster.intersectObject(scene.children[3]);
 	//若检测到的第一个对象到cameraControls的距离小于初始相机的z坐标值，则重设相机位置
 	if (intersection.length > 0) {	//todo需先判断射线检测不为空，以防止程序中断
 		if (intersection[0].distance < 3) {

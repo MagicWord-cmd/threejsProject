@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { OimoPhysics } from 'three/addons/physics/OimoPhysics.js';
+import { OimoPhysics } from './OimoPhysics';
 import Stats from 'three/addons/libs/stats.module.js';
 
 /* 001  声明基础对象 */
