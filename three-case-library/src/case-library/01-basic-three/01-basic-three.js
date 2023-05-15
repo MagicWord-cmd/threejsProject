@@ -44,7 +44,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
-gltfLoader.load('watch.glb',
+gltfLoader.load('DeluxeStaff.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
