@@ -30,8 +30,8 @@ let keyStates = {};
 /*    动画相关变量    */
 let clock = new THREE.Clock();
 let mixer, character, actions, animations, idleAction, walkAction,
-	backWalkAction, runAction, leftWalkAction, rightWalkAction, leftRunAction,
-	rightRunAction, jumpAction, fallingAction, landingAction, spurtAction;
+	backWalkAction, runAction,backRunAction, leftWalkAction, rightWalkAction, leftRunAction,
+	rightRunAction, jumpAction, fallingAction, landingAction;
 
 /*   重力    */
 let GRAVITY = 30;
@@ -183,7 +183,7 @@ function init() {
 
 	/*	 loadCharacter	*/
 	const characterLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
-	characterLoader.load('webCharacter01.glb',
+	characterLoader.load('character000.glb',
 		gltf => {	//todo所有的匿名函数都可以简写成箭头函数
 			character = gltf.scene;
 			scene.add(character);
@@ -264,17 +264,18 @@ function init() {
 			walkAction = mixer.clipAction(animations[1]);
 			backWalkAction = mixer.clipAction(animations[2]);
 			runAction = mixer.clipAction(animations[3]);
-			leftWalkAction = mixer.clipAction(animations[4]);
-			rightWalkAction = mixer.clipAction(animations[5]);
+			backRunAction = mixer.clipAction(animations[4]);
+			leftWalkAction = mixer.clipAction(animations[5]);
+			rightWalkAction = mixer.clipAction(animations[7]);
 			leftRunAction = mixer.clipAction(animations[6]);
-			rightRunAction = mixer.clipAction(animations[7]);
-			jumpAction = mixer.clipAction(animations[8]);
-			fallingAction = mixer.clipAction(animations[9]);
-			landingAction = mixer.clipAction(animations[10]);
-			spurtAction = mixer.clipAction(animations[11]);
+			rightRunAction = mixer.clipAction(animations[8]);
+			jumpAction = mixer.clipAction(animations[9]);
+			fallingAction = mixer.clipAction(animations[10]);
+			landingAction = mixer.clipAction(animations[11]);
+	
 
-			actions = [idleAction, walkAction, backWalkAction, runAction, leftWalkAction, rightWalkAction,
-				leftRunAction, rightRunAction, jumpAction, fallingAction, landingAction, spurtAction];
+			actions = [idleAction, walkAction, backWalkAction, runAction,backRunAction, leftWalkAction, rightWalkAction,
+				leftRunAction, rightRunAction, jumpAction, fallingAction, landingAction];
 			// console.log('actions', actions);
 
 			//设置动画混合的初始权重
@@ -372,7 +373,7 @@ function cameraAdaptive() {
 	//todo从cameraControls的位置，指向摄像机的方向做射线检测
 	raycaster.set(cameraControls.position, raycasterDriection)
 	//检测对象为scene.children[6]
-	const intersection = raycaster.intersectObject(scene.children[3]);
+	const intersection = raycaster.intersectObject(scene.children[6]);
 	//若检测到的第一个对象到cameraControls的距离小于初始相机的z坐标值，则重设相机位置
 	if (intersection.length > 0) {	//todo需先判断射线检测不为空，以防止程序中断
 		if (intersection[0].distance < 3) {
