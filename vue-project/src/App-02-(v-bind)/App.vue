@@ -1,5 +1,5 @@
 <template>
-  <Vbind />
+  <Vbind />  
 </template>
 
 <script setup>
