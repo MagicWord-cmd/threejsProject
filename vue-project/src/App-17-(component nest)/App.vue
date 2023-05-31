@@ -14,6 +14,8 @@
 
 </template>
 
+
+<!-- 使用export default时，components和setup不能混用，不然会报错 -->
 <script setup>
 
   import MyHeader from "./components/MyHeader.vue"

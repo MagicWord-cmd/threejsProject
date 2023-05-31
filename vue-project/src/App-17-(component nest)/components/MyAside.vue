@@ -7,6 +7,8 @@
     </div> 
 </template>
 
+
+<!-- 使用export default时，components和setup不能混用，不然会报错 -->
 <script setup>
 
     import MyItem from "./MyItem.vue"
