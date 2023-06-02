@@ -1,0 +1,20 @@
+vite环境搭建
+课程：nodejs + vitejs + threejs
+
+1.安装 nodejs http://nodejs.org/
+    验证：node -v
+
+2.创建vite项目：
+    npm create vite@latest
+
+3. cd vite-threejs-project
+    npm i vite three
+
+4.运行： npm run dev
+================================================================================
+threejs 开发总结：
+    1.mesh, light, helper 需要加入 scene
+    2.scene, camera, light, render, 四元素
+    3.orbitControls 控制的是 camera(eyes)
+
+  
