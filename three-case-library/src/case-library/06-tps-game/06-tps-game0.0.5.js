@@ -30,13 +30,16 @@ let keyStates = {};
 /*    动画相关变量    */
 let clock = new THREE.Clock();
 let mixer, character, actions, animations, idleAction, walkAction,
-	backWalkAction, runAction,backRunAction, leftWalkAction, rightWalkAction, leftRunAction,
+	backWalkAction, runAction, backRunAction, leftWalkAction, rightWalkAction, leftRunAction,
 	rightRunAction, jumpAction, fallingAction, landingAction;
 
 /*   重力    */
 let GRAVITY = 30;
 /*   Octree    */
 const worldOctree = new Octree();
+/*   terrainModel    */
+let terrainModel;
+
 /*    playerCollider角色胶囊碰撞体    */
 const playerCollider = {
 
@@ -131,6 +134,7 @@ function init() {
 	terrainLoader.load(
 		'collision-world2.glb',
 		terrain => {	//todo所有的匿名函数都可以简写成箭头函数
+			terrainModel = terrain.scene;
 			scene.add(terrain.scene);
 			terrain.scene.traverse(child => {
 				if (child.isMesh) {
@@ -272,9 +276,9 @@ function init() {
 			jumpAction = mixer.clipAction(animations[9]);
 			fallingAction = mixer.clipAction(animations[10]);
 			landingAction = mixer.clipAction(animations[11]);
-	
 
-			actions = [idleAction, walkAction, backWalkAction, runAction,backRunAction, leftWalkAction, rightWalkAction,
+
+			actions = [idleAction, walkAction, backWalkAction, runAction, backRunAction, leftWalkAction, rightWalkAction,
 				leftRunAction, rightRunAction, jumpAction, fallingAction, landingAction];
 			// console.log('actions', actions);
 
@@ -365,22 +369,24 @@ function getSideVoctor() {
 
 /*    相机防穿墙    */
 function cameraAdaptive() {
-	console.log(scene);
+	// console.log(scene);
 	const raycaster = new THREE.Raycaster();
 	let cameraWorldDriection = new THREE.Vector3();
 	camera.getWorldDirection(cameraWorldDriection);
 	let raycasterDriection = cameraWorldDriection.negate();//向量取反
 	//todo从cameraControls的位置，指向摄像机的方向做射线检测
+	//  判断terrainModel是否已加载，以防止报错
+	if (terrainModel === undefined) return;
 	raycaster.set(cameraControls.position, raycasterDriection)
-	//检测对象为scene.children[6]
-	const intersection = raycaster.intersectObject(scene.children[6]);
+	//检测对象为terrainModel
+	const intersection = raycaster.intersectObject(terrainModel);
 	//若检测到的第一个对象到cameraControls的距离小于初始相机的z坐标值，则重设相机位置
-	if (intersection.length > 0) {	//todo需先判断射线检测不为空，以防止程序中断
-		if (intersection[0].distance < 3) {
-			camera.position.set(0, 0, intersection[0].distance);
-		} else {
-			camera.position.set(0, 0, 3)
-		}
+	if (intersection.length > 0 && intersection[0].distance < 3) {	//todo需先判断射线检测不为空，以防止程序中断
+
+		camera.position.set(0, 0, intersection[0].distance);
+
+	} else {	//	未检测到terrainModel（会有射线打到天上的情况）则重设相机位置
+		camera.position.set(0, 0, 3)
 	}
 }
 

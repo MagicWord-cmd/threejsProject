@@ -17,6 +17,9 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 
+//todo 引入DecalGeometry
+import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+
 
 let renderer, camera, stats, controls;
 
@@ -25,6 +28,9 @@ let scene = new THREE.Scene();
 const gui = new GUI();
 
 let model;
+
+let DecalMaterial;
+initDecal();
 
 
 //todo声明变量参数集，用于设置BLOOM的GUI参数
@@ -148,7 +154,7 @@ gltfLoader.load('LeePerrySmith.glb',
                 'maxBox3Size': maxBox3Size,
                 'box3Center': box3Center,
                 'vector3': vector3,
-                'model': model
+                // 'model': model
             };
 
         }
@@ -190,7 +196,7 @@ function init(closured) {
 
 
     //HDR
-    const rgbeLoader = new RGBELoader();   
+    const rgbeLoader = new RGBELoader();
 
     rgbeLoader.loadAsync("/src/assets/textures/ninomaru_teien_2k.hdr").then((hdrTexture) => {
 
@@ -266,6 +272,7 @@ function init(closured) {
     const mousePosition = new THREE.Vector2();
     let intersects = [];
 
+    let mouseHelper, mouseHelperLine;
 
 
 
@@ -289,15 +296,88 @@ function init(closured) {
 
         //todo 重设后期渲染尺寸
         composer.setSize(window.innerWidth, window.innerHeight);
-    }
+    };
 
 
     //todo  窗口侦听鼠标移动
-    window.onpointermove = function(){
+    window.onpointermove = function (event) {
 
+        if (event.isPrimary) {
+
+
+            handleIntersection(event.clientX, event.clientY);
+        }
+
+    };
+
+    //todo  初始化mouseHelper和mouseHelperLine
+    function initIndicator() {
+
+        //  mouseHelperLine
+        const lineGeometry = new THREE.BufferGeometry();
+        lineGeometry.setFromPoints(
+            [
+                new THREE.Vector3(),
+                new THREE.Vector3(),
+            ]
+        );
+        mouseHelperLine = new THREE.Line(
+            lineGeometry,
+            new THREE.LineBasicMaterial({ color: 0xff0000 })
+        );
+        scene.add(mouseHelperLine);
+
+        //  mouseHelper
+        mouseHelper = new THREE.Mesh(
+            new THREE.BoxGeometry(
+                obj.maxBox3Size / 100,
+                obj.maxBox3Size / 100,
+                obj.maxBox3Size / 20,
+            ),
+            new THREE.MeshNormalMaterial()
+        );
+        scene.add(mouseHelper);
+    };
+
+
+    initIndicator();
+
+    //todo  根据鼠标检测到的模型位置和法线重新绘制mouseHelperLine
+    function handleIntersection(x, y) {
+        //  判断模型是否已加载，以防止报错
+        if (model === undefined) return;
+        //  将鼠标位置转换成以屏幕中心为坐标原点的算法
+        mousePosition.x = (x / window.innerWidth) * 2 - 1;
+        mousePosition.y = -(y / window.innerHeight) * 2 + 1;
+        //  recayster
+        recayster.setFromCamera(mousePosition, camera);
+
+        intersects.length = 0;
+        recayster.intersectObject(model, true, intersects);
+
+        if (intersects.length > 0) {
+
+            const firstIntersectObject = intersects[0];
+            const firstIntersectPoint = firstIntersectObject.point;
+            const firstIntersectNormal = firstIntersectObject.face.normal.clone();
+            firstIntersectNormal.transformDirection(model.matrixWorld);
+            firstIntersectNormal.add(firstIntersectPoint);
+
+            const position = mouseHelperLine.geometry.attributes.position;
+            position.setXYZ(0, firstIntersectPoint.x, firstIntersectPoint.y, firstIntersectPoint.z);
+            position.setXYZ(1, firstIntersectNormal.x, firstIntersectNormal.y, firstIntersectNormal.z);
+            position.needsUpdate = true;
+
+            mouseHelper.position.copy(firstIntersectPoint);
+            mouseHelper.lookAt(firstIntersectNormal);
+        }
+    };
+
+
+    //todo   initDecal()
+    function initDecal(){
+        
     }
-
-
 
     //animate
     function animate() {
@@ -313,9 +393,9 @@ function init(closured) {
         //更新后期渲染
         composer.render();
 
-    }
+    };
 
-    animate()
+    animate();
 
 
     //渲染器toneMapping模式gui
@@ -376,5 +456,5 @@ const params2 = {
 gui
     .addColor(params2, "color")
     .name("background")
-    .onChange((value) => {scene.background.set(value);});
+    .onChange((value) => { scene.background.set(value); });
 
