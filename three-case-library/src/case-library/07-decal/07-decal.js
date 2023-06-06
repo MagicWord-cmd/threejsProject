@@ -33,7 +33,7 @@ let model;
 let decalMaterial;
 let decalPosition = new THREE.Vector3();
 let decalOrientation = new THREE.Euler();
-let decalSize = new THREE.Vector3();
+let decalSize = new THREE.Vector3(1, 1, 1);
 
 
 
@@ -377,7 +377,7 @@ function init(closured) {
 
             // 重设decalOrientation
             decalOrientation = mouseHelper.rotation;
-
+            decalPosition = mouseHelper.position;
         }
     };
 
@@ -385,7 +385,7 @@ function init(closured) {
     //todo   initDecal()
     function initDecal() {
         decalMaterial = new THREE.MeshBasicMaterial({
-
+            color: 0xffff00
         });
 
     };
@@ -394,13 +394,20 @@ function init(closured) {
 
     //todo   shootDecal()
     function shootDecal() {
+        console.log('model', model);
         const shootedMaterial = decalMaterial.clone();
         shootedMaterial.color.setHex(Math.random() * 0xffffff);
         const decalMesh = new THREE.Mesh(
-            new DecalGeometry(model, decalPosition, decalOrientation, decalSize),
+            new DecalGeometry(
+                model.children[0],
+                decalPosition,
+                decalOrientation,
+                decalSize
+            ),
             shootedMaterial
         );
         scene.add(decalMesh);
+        console.log('decalMesh', decalMesh);
     };
 
 
