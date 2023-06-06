@@ -55,7 +55,7 @@ gltfLoader.load('LeePerrySmith.glb',
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
 
-        console.log(gltf.scene);
+        // console.log(gltf.scene);
         model = gltf.scene;
         scene.add(model);
 
@@ -105,59 +105,39 @@ gltfLoader.load('LeePerrySmith.glb',
 
 
 
-        //todo Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值
-        let box3 = new THREE.Box3();
+        //!Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值
+        let bbox = new THREE.Box3().setFromObject(model);
         let vector3 = new THREE.Vector3;
         let box3Center = new THREE.Vector3;
-        box3.expandByObject(gltf.scene);
-        box3.getSize(vector3);
-        box3.getCenter(box3Center);
 
-        //todo 获取包围盒尺寸的最小值
-        let minBox3Size = 0;
-        if (vector3.x < vector3.y) {
-            if (vector3.x < vector3.z) {
-                minBox3Size = vector3.x;
-            } else {
-                minBox3Size = vector3.z;
-            }
-        } else {
-            if (vector3.y < vector3.z) {
-                minBox3Size = vector3.y;
-            } else {
-                minBox3Size = vector3.z;
-            }
-        }
+        bbox.getSize(vector3);
+        // console.log('vector3', vector3);
+        bbox.getCenter(box3Center);
+        // console.log('box3Center', box3Center);
 
 
-        //todo 获取包围盒尺寸的最大值
-        let maxBox3Size = 0;
-        if (vector3.x > vector3.y) {
-            if (vector3.x > vector3.z) {
-                maxBox3Size = vector3.x;
-            } else {
-                maxBox3Size = vector3.z;
-            }
-        } else {
-            if (vector3.y > vector3.z) {
-                maxBox3Size = vector3.y;
-            } else {
-                maxBox3Size = vector3.z;
-            }
-        }
+        //!获取包围盒尺寸的最大值
+        let minBox3Size = (Math.min(vector3.x, vector3.y, vector3.z)).toFixed(2);
 
-        //todo 闭包函数，向外传输局部变量
+        //!获取包围盒尺寸的最大值
+        let maxBox3Size = (Math.max(vector3.x, vector3.y, vector3.z)).toFixed(2);
+
+
+
+        //!闭包函数，向外传输局部变量
         let closure = function () {
+
             return {
 
                 'minBox3Size': minBox3Size,
                 'maxBox3Size': maxBox3Size,
                 'box3Center': box3Center,
                 'vector3': vector3,
-                // 'model': model
             };
 
         }
+
+        //!闭包向函数init()传值
         init(closure);
 
     });
@@ -166,43 +146,52 @@ gltfLoader.load('LeePerrySmith.glb',
 //init
 function init(closured) {
 
-    //todo 声明对象来接收传入的值
+    //!声明对象来接收传入的值
     let obj = closured();
+    // console.log(obj);
 
     //camera
-    //todo 通过包围盒尺寸动态设置相机位置和视锥体以适配不同尺寸的模型
+    //!给场景添加透视相机,通过包围盒尺寸动态设置相机位置和视锥体以适配不同尺寸的模型
     camera = new THREE.PerspectiveCamera(
 
         60,
 
         window.innerWidth / window.innerHeight,
 
-        obj.minBox3Size / 100, obj.maxBox3Size * 10
+        obj.minBox3Size / 100,
+
+        obj.maxBox3Size * 10
 
     );
 
-    //todo 动态设置相机位置
+    //!动态设置相机位置
     camera.position.set(-obj.maxBox3Size, obj.vector3.y / 2, obj.maxBox3Size);
 
-    //todo 动态设置相机目标点为为外包盒中心，场景中有轨道控制器的话也需要同步修改
+    //!动态设置相机目标点为为外包盒中心，场景中有轨道控制器的话也需要同步修改
     camera.lookAt(obj.box3Center.x, obj.box3Center.y, obj.box3Center.z);
 
-    //todo 动态设置坐标辅助控件大小
+
+
+
+    //!动态设置坐标辅助控件大小
     scene.add(new THREE.AxesHelper(obj.maxBox3Size));
+
+
 
     //stats
     stats = new Stats();
     document.body.appendChild(stats.dom);
 
 
-    //HDR
-    const rgbeLoader = new RGBELoader();
 
-    rgbeLoader.loadAsync("/src/assets/textures/ninomaru_teien_2k.hdr").then((hdrTexture) => {
+    //!HDR
+    const rgbeLoader = new RGBELoader();    //实例化一个HDR加载器
+
+    rgbeLoader.loadAsync("../../assets/textures/ninomaru_teien_2k.hdr").then((hdrTexture) => {
 
         hdrTexture.mapping = THREE.EquirectangularReflectionMapping;
 
-        //todo 设置HDR的色彩空间
+        //!设置HDR的色彩空间
         hdrTexture.colorSpace = THREE.NoColorSpace;
 
         scene.background = new THREE.Color(0x000606);
@@ -220,7 +209,7 @@ function init(closured) {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    renderer.colorSpace = THREE.SRGBColorSpace;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     //!toneMapping能够塑造更真实的物理效果
     renderer.toneMapping = THREE.CineonToneMapping;
@@ -254,6 +243,7 @@ function init(closured) {
     controls.maxPolarAngle = Math.PI * 2;
     controls.minDistance = obj.maxBox3Size / 5;
     controls.maxDistance = obj.maxBox3Size * 5;
+
 
 
     //todo 添加后期bloom光晕
@@ -303,8 +293,6 @@ function init(closured) {
     window.onpointermove = function (event) {
 
         if (event.isPrimary) {
-
-
             handleIntersection(event.clientX, event.clientY);
         }
 
@@ -375,8 +363,8 @@ function init(closured) {
 
 
     //todo   initDecal()
-    function initDecal(){
-        
+    function initDecal() {
+
     }
 
     //animate
@@ -444,9 +432,7 @@ function init(closured) {
                 }
             }
         });
-
     });
-
 }
 
 // scene.background  GUI
