@@ -29,8 +29,12 @@ const gui = new GUI();
 
 let model;
 
-let DecalMaterial;
-initDecal();
+//  Decal
+let decalMaterial;
+let decalPosition = new THREE.Vector3();
+let decalOrientation = new THREE.Euler();
+let decalSize = new THREE.Vector3();
+
 
 
 //todo声明变量参数集，用于设置BLOOM的GUI参数
@@ -298,6 +302,18 @@ function init(closured) {
 
     };
 
+    //todo  窗口侦听鼠标点击
+    window.onpointerdown = function (event) {
+
+    };
+    window.onpointerup = function (event) {
+
+        handleIntersection();
+        shootDecal();
+    };
+
+
+
     //todo  初始化mouseHelper和mouseHelperLine
     function initIndicator() {
 
@@ -327,7 +343,6 @@ function init(closured) {
         scene.add(mouseHelper);
     };
 
-
     initIndicator();
 
     //todo  根据鼠标检测到的模型位置和法线重新绘制mouseHelperLine
@@ -343,6 +358,7 @@ function init(closured) {
         intersects.length = 0;
         recayster.intersectObject(model, true, intersects);
 
+        // 如果射线检测结果不为空，则重设mouseHelper和mouseHelperLine的位置和朝向
         if (intersects.length > 0) {
 
             const firstIntersectObject = intersects[0];
@@ -351,21 +367,43 @@ function init(closured) {
             firstIntersectNormal.transformDirection(model.matrixWorld);
             firstIntersectNormal.add(firstIntersectPoint);
 
-            const position = mouseHelperLine.geometry.attributes.position;
-            position.setXYZ(0, firstIntersectPoint.x, firstIntersectPoint.y, firstIntersectPoint.z);
-            position.setXYZ(1, firstIntersectNormal.x, firstIntersectNormal.y, firstIntersectNormal.z);
-            position.needsUpdate = true;
+            const linePosition = mouseHelperLine.geometry.attributes.position;
+            linePosition.setXYZ(0, firstIntersectPoint.x, firstIntersectPoint.y, firstIntersectPoint.z);
+            linePosition.setXYZ(1, firstIntersectNormal.x, firstIntersectNormal.y, firstIntersectNormal.z);
+            linePosition.needsUpdate = true;
 
             mouseHelper.position.copy(firstIntersectPoint);
             mouseHelper.lookAt(firstIntersectNormal);
+
+            // 重设decalOrientation
+            decalOrientation = mouseHelper.rotation;
+
         }
     };
 
 
     //todo   initDecal()
     function initDecal() {
+        decalMaterial = new THREE.MeshBasicMaterial({
 
-    }
+        });
+
+    };
+    initDecal();
+
+
+    //todo   shootDecal()
+    function shootDecal() {
+        const shootedMaterial = decalMaterial.clone();
+        shootedMaterial.color.setHex(Math.random() * 0xffffff);
+        const decalMesh = new THREE.Mesh(
+            new DecalGeometry(model, decalPosition, decalOrientation, decalSize),
+            shootedMaterial
+        );
+        scene.add(decalMesh);
+    };
+
+
 
     //animate
     function animate() {
