@@ -33,7 +33,7 @@ let model;
 let decalMaterial;
 let decalPosition = new THREE.Vector3();
 let decalOrientation = new THREE.Euler();
-let decalSize = new THREE.Vector3(1, 1, 1);
+let decalSize = new THREE.Vector3(2, 1, 1);
 
 
 
@@ -54,7 +54,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
-gltfLoader.load('LeePerrySmith.glb',
+gltfLoader.load('cxswzt2.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
@@ -265,6 +265,8 @@ function init(closured) {
     let recayster = new THREE.Raycaster();
     const mousePosition = new THREE.Vector2();
     let intersects = [];
+    let firstIntersectObject, firstIntersectPoint, firstIntersectNormal
+
 
     let mouseHelper, mouseHelperLine;
 
@@ -304,13 +306,14 @@ function init(closured) {
 
     //todo  窗口侦听鼠标点击
     window.onpointerdown = function (event) {
+        //  判断射线检测是否为空，不为空执行
+        if (intersects.length > 0) {
+            handleIntersection();
+            shootDecal();
+        }
 
     };
-    window.onpointerup = function (event) {
 
-        handleIntersection();
-        shootDecal();
-    };
 
 
 
@@ -361,9 +364,9 @@ function init(closured) {
         // 如果射线检测结果不为空，则重设mouseHelper和mouseHelperLine的位置和朝向
         if (intersects.length > 0) {
 
-            const firstIntersectObject = intersects[0];
-            const firstIntersectPoint = firstIntersectObject.point;
-            const firstIntersectNormal = firstIntersectObject.face.normal.clone();
+            firstIntersectObject = intersects[0];
+            firstIntersectPoint = firstIntersectObject.point;
+            firstIntersectNormal = firstIntersectObject.face.normal.clone();
             firstIntersectNormal.transformDirection(model.matrixWorld);
             firstIntersectNormal.add(firstIntersectPoint);
 
@@ -384,8 +387,22 @@ function init(closured) {
 
     //todo   initDecal()
     function initDecal() {
+        const decalDiffuse = new THREE.TextureLoader().load(
+            "../../assets/textures/decalTest.jpg"
+        );
+        // const decalNormal = new THREE.TextureLoader().load(
+        //     "../../assets/textures/decal-normal.jpg"
+        // );
         decalMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffff00
+            map: decalDiffuse,
+            // normalMap: decalNormal,
+            // normalScale: new THREE.Vector2(1, 1),
+            // transparent: true,
+            // depthTest: true,
+            // depthWrite: false,
+            polygonOffset: true,
+            polygonOffsetFactor: -4,
+            wireframe: false
         });
 
     };
@@ -394,12 +411,12 @@ function init(closured) {
 
     //todo   shootDecal()
     function shootDecal() {
-        console.log('model', model);
+        console.log('firstIntersectObject', firstIntersectObject);
         const shootedMaterial = decalMaterial.clone();
-        shootedMaterial.color.setHex(Math.random() * 0xffffff);
+        // shootedMaterial.color.setHex(Math.random() * 0xffffff);
         const decalMesh = new THREE.Mesh(
             new DecalGeometry(
-                model.children[0],
+                firstIntersectObject.object,
                 decalPosition,
                 decalOrientation,
                 decalSize
