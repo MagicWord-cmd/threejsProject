@@ -1,6 +1,5 @@
 <template>
-    <h3>Child</h3>
-    <button @click="clickEventHandle">传递数据</button>
+    搜索：<input type="text" v-model="search">
 </template>
 
 <script>
@@ -9,17 +8,14 @@
 
         data() {
             return {
-                msg: "传递数据2"
+                search:""
             }
         },
 
-
-        methods: {
-            clickEventHandle() {
-                //  自定义事件
-                // this.$emit("someEvent", "传递的数据");
-                this.$emit("someEvent2", this.msg)
-
+        //  侦听器
+        watch:{
+            search(newValue,oldValue){
+                this.$emit("searchEvent",newValue)
             }
         }
     }

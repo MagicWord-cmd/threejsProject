@@ -1,7 +1,8 @@
 <template>
     <h3>Parent</h3>
-    <p>搜索内容为：{{ search }}</p>
-    <Child @searchEvent="getSearch"/>
+    <p>{{ message }}</p>
+    <Child title="标题" :sendFunction="dataFn"/>
+    
 </template>
 
 <script>
@@ -13,17 +14,18 @@
 
         data() {
             return {
-                search:""
+                message:""
             }
         },
 
         components: {
             Child
         },
-        
+
         methods:{
-            getSearch(data){
-                this.search = data;
+            dataFn(data){
+                console.log(data);
+                this.message = data;
             }
         }
     }
