@@ -8,25 +8,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!--!   引入CSS  设置样式   -->
-    <link type="text/css" rel="stylesheet" href="../../assets/css/main.css">
+    <link type="text/css" rel="stylesheet" href="/src/assets/css/main.css">
 
     <!--!   窗口标题   -->
-    <title>07-decal.js</title>
+    <title>11-materials-texture-canvas</title>
+
+    <style>
+        #drawing-canvas {
+            position: absolute;
+            background-color: #000000;
+            top: 0px;
+            right: 0px;
+            z-index: 3000;
+            cursor: crosshair;
+            touch-action: none;
+        }
+    </style>
 
 </head>
 
 <body>
     <!--创建一个div，用于容纳渲染输出画布，渲染输出内容将在.js文件中配置-->
     <div id="info">
-        Decal布展功能，可以支持弧线墙面的投影<br />
-        鼠标左键 拖曳视图<br />
-        鼠标中间 推拉视图<br />
-        鼠标右键 平移视图<br />
-        空格键 在鼠标位置生成Decal<br />
-
+        11-materials-texture-canvas<br />
     </div>
 
-</script>
+    <!-- drawing-canvas -->
+    <canvas id="drawing-canvas" height="512" width="512"></canvas>
+
+    </script>
 
     <!--! 引入对应项目的.js文件  -->
     <script type="module" src="main.js"></script>

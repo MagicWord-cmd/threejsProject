@@ -30,7 +30,8 @@ async function init() {
     camera.lookAt(0, 4, 0);
 
     scene = new THREE.Scene();
-
+    //! 将摄像机添加到场景，使摄像机跟随场景一起旋转，从而造成旋转HDR的假象
+    scene.add(camera);
     const hdrLoader = new RGBELoader();
     envMap = await hdrLoader.loadAsync('/textures/skidpan_2k.hdr');
 
@@ -57,16 +58,16 @@ async function init() {
     loader.load('/models/gltf/ferrari.glb', function (gltf) {
 
         const bodyMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x000000, metalness: 1.0, roughness: 0.8,
+            color: 0xdd2800, metalness: 1.0, roughness: 0.8,
             clearcoat: 1.0, clearcoatRoughness: 0.15
         });
 
         const detailsMaterial = new THREE.MeshStandardMaterial({
-            color: 0xffffff, metalness: 1.0, roughness: 0.5
+            color: 0x111111, metalness: 1.0, roughness: 0.5
         });
 
         const glassMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff, metalness: 0.25, roughness: 0, transmission: 1.0
+            color: 0x00eeee, metalness: 0.25, roughness: 0, transmission: 1
         });
 
         const carModel = gltf.scene.children[0];
@@ -111,6 +112,7 @@ async function init() {
 
     //  controls
     const controls = new OrbitControls(camera, renderer.domElement);
+
     controls.addEventListener('change', render);
     controls.target.set(0, 2, 0);
     controls.maxPolarAngle = THREE.MathUtils.degToRad(90);

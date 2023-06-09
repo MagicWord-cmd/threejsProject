@@ -33,6 +33,7 @@ let model;
 let decalMaterial;
 let decalPosition = new THREE.Vector3();
 let decalOrientation = new THREE.Euler();
+//! decalSize用于控制Decal几何体的大小，比例和深度，Z坐标（深度）较小的可用于单面投影
 let decalSize = new THREE.Vector3(2, 1, 1);
 
 
@@ -53,8 +54,8 @@ const params = {
 
 
 //gltfLoader
-const gltfLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
-gltfLoader.load('cxswzt2.glb',
+const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
+gltfLoader.load('artMuseum2.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
@@ -219,7 +220,7 @@ function init(closured) {
     renderer.toneMapping = THREE.CineonToneMapping;
 
     //!设置toneMapping曝光度
-    renderer.toneMappingExposure = 1;
+    renderer.toneMappingExposure = 0.75;
 
     document.body.appendChild(renderer.domElement);
 
@@ -304,15 +305,21 @@ function init(closured) {
 
     };
 
-    //todo  窗口侦听鼠标点击
-    window.onpointerdown = function (event) {
-        //  判断射线检测是否为空，不为空执行
-        if (intersects.length > 0) {
-            handleIntersection();
-            shootDecal();
+    //todo  窗口侦听键盘点击
+    window.onkeydown = function (event) {
+    
+        switch (event.keyCode) {
+            //  空格键
+            case 32:
+                //  判断射线检测是否为空，不为空执行
+                if (intersects.length > 0) {
+                    handleIntersection();
+                    shootDecal();
+                }
+                break;
         }
-
     };
+
 
 
 
@@ -337,9 +344,9 @@ function init(closured) {
         //  mouseHelper
         mouseHelper = new THREE.Mesh(
             new THREE.BoxGeometry(
-                obj.maxBox3Size / 100,
-                obj.maxBox3Size / 100,
-                obj.maxBox3Size / 20,
+                obj.maxBox3Size / 500,
+                obj.maxBox3Size / 500,
+                obj.maxBox3Size / 50,
             ),
             new THREE.MeshNormalMaterial()
         );
@@ -401,7 +408,9 @@ function init(closured) {
             // depthTest: true,
             // depthWrite: false,
             polygonOffset: true,
-            polygonOffsetFactor: -4,
+
+            //!  polygonOffsetFactor防止重面闪烁
+            polygonOffsetFactor: -2,
             wireframe: false
         });
 
