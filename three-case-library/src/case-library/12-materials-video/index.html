@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!--   引入CSS  设置样式   -->
+    <link type="text/css" rel="stylesheet" href="/src/assets/css/main.css">
+
+    <!--   窗口标题   -->
+    <title>12-materials-video</title>
+
+    <div id="info">
+        12-materials-video<br />
+    </div>
+
+    <!-- 播放按钮 -->
+    <div id="overlay">
+        <button id="startButton">Play</button>
+    </div>
+
+    <!-- container -->
+    <div id="container"></div>
+
+    <!-- video -->
+    <!-- https://www.w3school.com.cn/tags/tag_video.asp -->
+    <video id="video" loop crossOrigin="anonymous" playsinline style="display:none">
+        <source src="../../../public/textures/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+        <source src="../../../public/textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+
+</head>
+
+<body>
+
+    </script>
+
+    <!--! 引入对应项目的.js文件  -->
+    <script type="module" src="main.js"></script>
+
+</body>
+
+</html>

@@ -32,13 +32,14 @@ function init() {
 
 function setupCanvasDrawing() {
 
-	// get canvas and context
-	const drawingCanvas = document.getElementById('drawing-canvas');
+	//! CanvasRenderingContext2D
+	//!	https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D
+	const drawingCanvas = document.getElementById('drawing-canvas');	
 	const drawingContext = drawingCanvas.getContext('2d');
 
 	// draw white background
-	drawingContext.fillStyle = '#ffffff';
-	drawingContext.fillRect(0, 0, 512, 512);
+	drawingContext.fillStyle = '#ffffff';	//填充样式
+	drawingContext.fillRect(0, 0, 512, 512);	//绘制填充矩形（起点x,起点y，width,height）
 
 	//todo 将画布纹理设置为material.map(但不仅限于此，原则上可以是任意通道)
 	// 从Canvas元素中创建纹理贴图。它几乎与其基类Texture相同，但它直接将needsUpdate（需要更新）设置为了true。
@@ -68,6 +69,7 @@ function setupCanvasDrawing() {
 
 	});
 
+	//todo	防止 pointerup 发生在 drawingCanvas 画布之外而产生的错误。
 	drawingCanvas.addEventListener('pointerleave', function () {
 
 		paint = false;
@@ -79,15 +81,18 @@ function setupCanvasDrawing() {
 //	draw()
 function draw(drawContext, x, y) {
 
-	drawContext.moveTo(drawStartPos.x, drawStartPos.y);
+	//	CanvasRenderingContext2D.moveTo()将一个新的子路径的起始点移动到 (x，y) 坐标。
+	drawContext.moveTo(drawStartPos.x, drawStartPos.y);	
+	//	图形边线的颜色和样式。默认 #000 (黑色).
 	drawContext.strokeStyle = '#000000';
+	// 使用直线连接子路径的最后的点到 x,y 坐标。
 	drawContext.lineTo(x, y);
+	// 使用当前的样式描边子路径。
 	drawContext.stroke();
 	// reset drawing start position to current position.
 	drawStartPos.set(x, y);
 	// need to flag the map as needing updating.
 	material.map.needsUpdate = true;
-
 }
 
 function onWindowResize() {
