@@ -11,15 +11,10 @@
     <link type="text/css" rel="stylesheet" href="/src/assets/css/main.css">
 
     <!--   窗口标题   -->
-    <title>12-materials-video</title>
+    <title>13-materials-webcam</title>
 
     <div id="info">
-        12-materials-video<br />
-    </div>
-
-    <!-- 播放按钮 -->
-    <div id="overlay">
-        <button id="startButton">Play</button>
+        13-materials-webcam<br />
     </div>
 
     <!-- container -->
@@ -27,10 +22,13 @@
 
     <!-- video -->
     <!-- https://www.w3school.com.cn/tags/tag_video.asp -->
-    <video id="video" loop crossOrigin="anonymous" playsinline style="display:none">
-        <source src="/textures/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
-        <source src="/textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-    </video>
+    <video id="video" style="display:none" autoplay playsinline></video>
+
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <!-- es-module-shims:浏览器中基本模块支持上的新ES模块功能的垫片 -->
+    <!-- http://www.javascriptcn.com/post/5eedcc5bb5cbfe1ea061276d -->
+    <script async src="https://unpkg.com/es-module-shims@1.7.3/dist/es-module-shims.js"></script>
 
 </head>
 

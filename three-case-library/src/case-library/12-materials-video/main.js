@@ -22,25 +22,23 @@ let windowHalfY = window.innerHeight / 2;
 
 let cube_count;
 
-const meshes = [],
-	materials = [],
+const meshes = [], materials = [], xgrid = 20, ygrid = 10;
 
-	xgrid = 20,
-	ygrid = 10;
-
+// 获取按钮并定义按钮点击事件
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', function () {
-
 	init();
 	animate();
-
 });
 
+//	init
 function init() {
 
+	//	移除play按钮div
 	const overlay = document.getElementById('overlay');
 	overlay.remove();
 
+	//	创建一个新的div并附加给body
 	container = document.createElement('div');
 	document.body.appendChild(container);
 
@@ -58,12 +56,11 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	container.appendChild(renderer.domElement);
 
+	
 	video = document.getElementById('video');
 	video.play();
 	video.addEventListener('play', function () {
-
 		this.currentTime = 3;
-
 	});
 
 	texture = new THREE.VideoTexture(video);
@@ -91,7 +88,7 @@ function init() {
 			oy = j;
 
 			geometry = new THREE.BoxGeometry(xsize, ysize, xsize);
-
+			console.log(geometry);
 			change_uvs(geometry, ux, uy, ox, oy);
 
 			materials[cube_count] = new THREE.MeshLambertMaterial(parameters);
@@ -159,6 +156,7 @@ function onWindowResize() {
 
 }
 
+//todo	改变UV的函数
 function change_uvs(geometry, unitx, unity, offsetx, offsety) {
 
 	const uvs = geometry.attributes.uv.array;
