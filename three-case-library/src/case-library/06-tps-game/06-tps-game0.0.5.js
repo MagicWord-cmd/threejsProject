@@ -130,7 +130,7 @@ function init() {
 	scene.add(directionalLight);
 
 	/*	 loadTerrain	*/
-	const terrainLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
+	const terrainLoader = new GLTFLoader().setPath('/models/gltf/');
 	terrainLoader.load(
 		'collision-world2.glb',
 		terrain => {	//todo所有的匿名函数都可以简写成箭头函数
@@ -186,7 +186,7 @@ function init() {
 	}
 
 	/*	 loadCharacter	*/
-	const characterLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
+	const characterLoader = new GLTFLoader().setPath('/models/gltf/');
 	characterLoader.load('character000.glb',
 		gltf => {	//todo所有的匿名函数都可以简写成箭头函数
 			character = gltf.scene;

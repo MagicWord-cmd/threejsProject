@@ -43,8 +43,8 @@ const params = {
 
 
 //gltfLoader
-const gltfLoader = new GLTFLoader().setPath('/src/assets/models/gltf/');
-gltfLoader.load('DeluxeStaff.glb',
+const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
+gltfLoader.load('lightMap.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
@@ -190,7 +190,7 @@ function init(closured) {
 
 
     //HDR
-    const rgbeLoader = new RGBELoader();   
+    const rgbeLoader = new RGBELoader();
 
     rgbeLoader.loadAsync("/src/assets/textures/ninomaru_teien_2k.hdr").then((hdrTexture) => {
 
@@ -360,5 +360,5 @@ const params2 = {
 gui
     .addColor(params2, "color")
     .name("background")
-    .onChange((value) => {scene.background.set(value);});
+    .onChange((value) => { scene.background.set(value); });
 
