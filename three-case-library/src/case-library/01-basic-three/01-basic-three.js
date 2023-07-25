@@ -96,7 +96,7 @@ gltfLoader.load('lightMap.glb',
 
         });
 
-
+        
 
 
         //todo Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值

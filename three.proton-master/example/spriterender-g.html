@@ -124,7 +124,7 @@
         emitter.addInitialize(new Proton.Position(new Proton.SphereZone(20)));
         emitter.addInitialize(new Proton.V(new Proton.Span(500, 800), new Proton.Vector3D(0, 1, 0), 30));
         emitter.addBehaviour(new Proton.RandomDrift(10, 10, 10, .05));
-        //emitter.addBehaviour(new Proton.Alpha(1, 0.1));
+        // emitter.addBehaviour(new Proton.Alpha(1, 0.1));
         emitter.addBehaviour(new Proton.Scale(new Proton.Span(2, 3.5), 0));
         emitter.addBehaviour(new Proton.G(6));
         emitter.addBehaviour(new Proton.Color('#FF0026', ['#ffff00', '#ffff11'], Infinity, Proton.easeOutSine));
