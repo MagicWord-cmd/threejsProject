@@ -22,6 +22,7 @@ let renderer, camera, stats, controls, AxesHelper, evnFolder;
 let scene = new THREE.Scene();
 const gui = new GUI();
 let model;
+let settings = { 'show AxesHelper': true }
 
 
 //todo声明变量参数集，用于设置BLOOM的GUI参数
@@ -37,8 +38,8 @@ const params = {
 
 };
 
-const modelsApi = { modelsList: 'lightMap' }
-const modelsStats = ['lightMap', 'LeePerrySmith', 'watch'];
+const modelsApi = { modelsList: 'Watch_L2115' }
+const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Bicyle_B16'];
 
 
 //init
@@ -357,10 +358,17 @@ function init() {
 init();
 
 
+function showAxesHelper(visibility) {
+
+    AxesHelper.visible = visibility;
+
+}
+
+gui.add(settings, 'show AxesHelper').onChange(showAxesHelper);
 const modelsFolder = gui.addFolder('Models');
 const modelsCtrl = modelsFolder.add(modelsApi, 'modelsList').options(modelsStats);
 modelsCtrl.onChange(function () {
-    
+
     document.body.removeChild(renderer.domElement);
     gui.foldersRecursive();
     scene.remove(model);
