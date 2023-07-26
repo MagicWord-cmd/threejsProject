@@ -39,7 +39,7 @@ const params = {
 };
 
 const modelsApi = { modelsList: 'Watch_L2115' }
-const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Bicyle_B16'];
+const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Necklace_Greek', 'Bicyle_B16', 'Car_H9','ZZJK','Monkey'];
 
 
 //init
@@ -217,7 +217,7 @@ function init() {
         renderer.colorSpace = THREE.SRGBColorSpace;
 
         //!toneMapping能够塑造更真实的物理效果
-        renderer.toneMapping = THREE.CineonToneMapping;
+        renderer.toneMapping = THREE.LinearToneMapping;
 
         //!设置toneMapping曝光度
         renderer.toneMappingExposure = 1;
