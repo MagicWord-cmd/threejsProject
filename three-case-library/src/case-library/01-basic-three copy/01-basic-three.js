@@ -39,7 +39,7 @@ const params = {
 };
 
 const modelsApi = { modelsList: 'Watch_L2115' }
-const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Necklace_Greek', 'Bicyle_B16', 'Car_H9','ZZJK','Monkey'];
+const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Necklace_Greek', 'Bicyle_B16', 'Car_H9', 'ZZJK', 'Monkey'];
 
 
 //init
@@ -171,12 +171,12 @@ function init() {
 
             window.innerWidth / window.innerHeight,
 
-            obj.minBox3Size / 100, obj.maxBox3Size * 10
+            obj.minBox3Size / 5, obj.maxBox3Size * 50
 
         );
 
         //todo 动态设置相机位置
-        camera.position.set(-obj.maxBox3Size, obj.vector3.y / 2, obj.maxBox3Size);
+        camera.position.set(-obj.maxBox3Size / 1.5, obj.vector3.y / 2, obj.maxBox3Size / 1.5);
 
         //todo 动态设置相机目标点为为外包盒中心，场景中有轨道控制器的话也需要同步修改
         camera.lookAt(obj.box3Center.x, obj.box3Center.y, obj.box3Center.z);
@@ -242,8 +242,8 @@ function init() {
         );
         //!动态设置controls的可控范围
         controls.maxPolarAngle = Math.PI * 2;
-        controls.minDistance = obj.maxBox3Size / 5;
-        controls.maxDistance = obj.maxBox3Size * 5;
+        controls.minDistance = obj.maxBox3Size / 4;
+        controls.maxDistance = obj.maxBox3Size * 4;
 
 
         //todo 添加后期bloom光晕
@@ -297,62 +297,9 @@ function init() {
 
         animate()
 
-        // evnFolder = gui.addFolder('Environment');
-        // //渲染器toneMapping模式gui
-        // evnFolder
-        //     .add(renderer, "toneMapping")
-
-        // //场景曝光度gui
-        // evnFolder
-        //     .add(
-        //         renderer,                //对象
-        //         "toneMappingExposure",   //对象属性
-        //         0, 5, 0.1               //最小值，最大值，滑杆刻度
-        //     )
-
-        // //todo bloom控制器gui
-        // evnFolder.add(params, 'bloomThreshold', 0.0, 1.0, 0.001).onChange(function (value) {
-
-        //     bloomPass.threshold = Number(value);
-
-        // });
-
-        // evnFolder.add(params, 'bloomStrength', 0.0, 5, 0.001).onChange(function (value) {
-
-        //     bloomPass.strength = Number(value);
-
-        // });
-
-        // evnFolder.add(params, 'bloomRadius', 0, 5, 0.001).onChange(function (value) {
-
-        //     bloomPass.radius = Number(value);
-
-        // });
-
-        // //todo 为有灯光的材质添加灯光强度倍增GUI
-        // evnFolder.add(params, 'emissiveMultiply', 0, 50, 0.001).onChange(function (value) {
-
-        //     model.traverse(function (object) {
-
-        //         if (object.isMesh) {
-        //             //emissiveMap
-        //             if (object.material.emissive || object.material.emissiveMap) {
-        //                 object.material.emissiveIntensity = Number(value);
-        //             }
-        //         }
-        //     });
-
-        // });
-
-        // const params2 = {
-        //     color: "#254141)",
-        // };
-        // evnFolder
-        //     .addColor(params2, "color")
-        //     .name("background")
-        //     .onChange((value) => { scene.background.set(value); });
-
+        return renderer, camera;
     }
+    return renderer, camera;
 }
 
 init();
@@ -378,3 +325,58 @@ modelsCtrl.onChange(function () {
     init();
 
 });
+
+evnFolder = gui.addFolder('Environment');
+//渲染器toneMapping模式gui
+evnFolder
+    .add(renderer, "toneMapping")
+
+//场景曝光度gui
+evnFolder
+    .add(
+        renderer,                //对象
+        "toneMappingExposure",   //对象属性
+        0, 5, 0.1               //最小值，最大值，滑杆刻度
+    )
+
+//todo bloom控制器gui
+evnFolder.add(params, 'bloomThreshold', 0.0, 1.0, 0.001).onChange(function (value) {
+
+    bloomPass.threshold = Number(value);
+
+});
+
+evnFolder.add(params, 'bloomStrength', 0.0, 5, 0.001).onChange(function (value) {
+
+    bloomPass.strength = Number(value);
+
+});
+
+evnFolder.add(params, 'bloomRadius', 0, 5, 0.001).onChange(function (value) {
+
+    bloomPass.radius = Number(value);
+
+});
+
+//todo 为有灯光的材质添加灯光强度倍增GUI
+evnFolder.add(params, 'emissiveMultiply', 0, 50, 0.001).onChange(function (value) {
+
+    model.traverse(function (object) {
+
+        if (object.isMesh) {
+            //emissiveMap
+            if (object.material.emissive || object.material.emissiveMap) {
+                object.material.emissiveIntensity = Number(value);
+            }
+        }
+    });
+
+});
+
+const params2 = {
+    color: "#254141)",
+};
+evnFolder
+    .addColor(params2, "color")
+    .name("background")
+    .onChange((value) => { scene.background.set(value); });
