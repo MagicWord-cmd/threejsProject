@@ -297,9 +297,62 @@ function init() {
 
         animate()
 
-        return renderer, camera;
+        // evnFolder = gui.addFolder('Environment');
+        // //渲染器toneMapping模式gui
+        // evnFolder
+        //     .add(renderer, "toneMapping")
+
+        // //场景曝光度gui
+        // evnFolder
+        //     .add(
+        //         renderer,                //对象
+        //         "toneMappingExposure",   //对象属性
+        //         0, 5, 0.1               //最小值，最大值，滑杆刻度
+        //     )
+
+        // //todo bloom控制器gui
+        // evnFolder.add(params, 'bloomThreshold', 0.0, 1.0, 0.001).onChange(function (value) {
+
+        //     bloomPass.threshold = Number(value);
+
+        // });
+
+        // evnFolder.add(params, 'bloomStrength', 0.0, 5, 0.001).onChange(function (value) {
+
+        //     bloomPass.strength = Number(value);
+
+        // });
+
+        // evnFolder.add(params, 'bloomRadius', 0, 5, 0.001).onChange(function (value) {
+
+        //     bloomPass.radius = Number(value);
+
+        // });
+
+        // //todo 为有灯光的材质添加灯光强度倍增GUI
+        // evnFolder.add(params, 'emissiveMultiply', 0, 50, 0.001).onChange(function (value) {
+
+        //     model.traverse(function (object) {
+
+        //         if (object.isMesh) {
+        //             //emissiveMap
+        //             if (object.material.emissive || object.material.emissiveMap) {
+        //                 object.material.emissiveIntensity = Number(value);
+        //             }
+        //         }
+        //     });
+
+        // });
+
+        // const params2 = {
+        //     color: "#254141)",
+        // };
+        // evnFolder
+        //     .addColor(params2, "color")
+        //     .name("background")
+        //     .onChange((value) => { scene.background.set(value); });
+
     }
-    return renderer, camera;
 }
 
 init();
@@ -325,58 +378,3 @@ modelsCtrl.onChange(function () {
     init();
 
 });
-
-evnFolder = gui.addFolder('Environment');
-//渲染器toneMapping模式gui
-evnFolder
-    .add(renderer, "toneMapping")
-
-//场景曝光度gui
-evnFolder
-    .add(
-        renderer,                //对象
-        "toneMappingExposure",   //对象属性
-        0, 5, 0.1               //最小值，最大值，滑杆刻度
-    )
-
-//todo bloom控制器gui
-evnFolder.add(params, 'bloomThreshold', 0.0, 1.0, 0.001).onChange(function (value) {
-
-    bloomPass.threshold = Number(value);
-
-});
-
-evnFolder.add(params, 'bloomStrength', 0.0, 5, 0.001).onChange(function (value) {
-
-    bloomPass.strength = Number(value);
-
-});
-
-evnFolder.add(params, 'bloomRadius', 0, 5, 0.001).onChange(function (value) {
-
-    bloomPass.radius = Number(value);
-
-});
-
-//todo 为有灯光的材质添加灯光强度倍增GUI
-evnFolder.add(params, 'emissiveMultiply', 0, 50, 0.001).onChange(function (value) {
-
-    model.traverse(function (object) {
-
-        if (object.isMesh) {
-            //emissiveMap
-            if (object.material.emissive || object.material.emissiveMap) {
-                object.material.emissiveIntensity = Number(value);
-            }
-        }
-    });
-
-});
-
-const params2 = {
-    color: "#254141)",
-};
-evnFolder
-    .addColor(params2, "color")
-    .name("background")
-    .onChange((value) => { scene.background.set(value); });
