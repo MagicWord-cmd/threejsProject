@@ -1,0 +1,692 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <tab name="init" type="InitTab" active="false" scrollx="837.5102504230294" scrolly="335.19142296930283" scale="0.7462153966366271">
+    <block xmlns="https://developers.google.com/blockly/xml" type="initSettings" id="8{l^$Y{2+i$G:1`aK5a;" x="-930" y="-410">
+      <field name="LOAD_COMP_ASSETS">TRUE</field>
+      <field name="FULLSCREEN">TRUE</field>
+      <field name="BKG_TRANSPARENCY">FALSE</field>
+      <field name="PRESERVE_DRAW_BUF">FALSE</field>
+      <field name="FADE_ANNOTATIONS">TRUE</field>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="initPreloader" id="@5Ey-1,yG7$~N3#IpH;[" x="-990" y="-150">
+      <statement name="DO_START">
+        <block type="setHTMLElemStyle" id="o2gUgWAa;br~]0E?vg76">
+          <field name="PROPERTY">display</field>
+          <field name="PARENT">TRUE</field>
+          <value name="VALUE">
+            <block type="text" id="}oc0q9QfKT6JjVNAG$gw">
+              <field name="TEXT">none</field>
+            </block>
+          </value>
+          <value name="ID">
+            <shadow type="text" id="NrmWMJ`A/fNlX|o.uJP!">
+              <field name="TEXT">Color01Text</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="setHTMLElemStyle" id="l`Z8o?h%X8|]zk4Yh%Pb">
+              <field name="PROPERTY">display</field>
+              <field name="PARENT">TRUE</field>
+              <value name="VALUE">
+                <block type="text" id="mIT=%wue[+wSQCX:q84j">
+                  <field name="TEXT">none</field>
+                </block>
+              </value>
+              <value name="ID">
+                <shadow type="text" id="i!ZO:0YrToE-Jl#cXkLw">
+                  <field name="TEXT">Color02Text</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="setHTMLElemStyle" id="]/69Qn}_F`R5V6n5Fj-/">
+                  <field name="PROPERTY">display</field>
+                  <field name="PARENT">TRUE</field>
+                  <value name="VALUE">
+                    <block type="text" id="h%yTk[6(7b_vz)%W*7Sy">
+                      <field name="TEXT">none</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <shadow type="text" id="|%iW_s}vkZl)61^|65c*">
+                      <field name="TEXT">Color03Text</field>
+                    </shadow>
+                  </value>
+                  <next>
+                    <block type="setHTMLElemStyle" id=";jCH1IG#Ik7o4-w5_.E;">
+                      <field name="PROPERTY">display</field>
+                      <field name="PARENT">TRUE</field>
+                      <value name="VALUE">
+                        <block type="text" id="t1Xf{DcGjam,ZSUX7mS:">
+                          <field name="TEXT">none</field>
+                        </block>
+                      </value>
+                      <value name="ID">
+                        <shadow type="text" id="2u*-MJKW:yI@|4neGmTh">
+                          <field name="TEXT">LG01Text</field>
+                        </shadow>
+                      </value>
+                      <next>
+                        <block type="setHTMLElemStyle" id="NT%(!@X5H(`D/C]H!!.v">
+                          <field name="PROPERTY">display</field>
+                          <field name="PARENT">TRUE</field>
+                          <value name="VALUE">
+                            <block type="text" id="niNou[0,[$iXp}4DNkw#">
+                              <field name="TEXT">none</field>
+                            </block>
+                          </value>
+                          <value name="ID">
+                            <shadow type="text" id="^]Tah7vdSi29A[[Q}D,8">
+                              <field name="TEXT">LG02Text</field>
+                            </shadow>
+                          </value>
+                          <next>
+                            <block type="setHTMLElemStyle" id="3#(|VbPX_q)Tl{Wd^MvA">
+                              <field name="PROPERTY">display</field>
+                              <field name="PARENT">TRUE</field>
+                              <value name="VALUE">
+                                <block type="text" id="V(G.CeU$B[D?!|c_(u?$">
+                                  <field name="TEXT">none</field>
+                                </block>
+                              </value>
+                              <value name="ID">
+                                <shadow type="text" id="c+J-jPX4h-t)]v2:4}lP">
+                                  <field name="TEXT">LG03Text</field>
+                                </shadow>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </next>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </statement>
+    </block>
+  </tab>
+  <tab name="main" type="MainTab" active="true" scrollx="861.680272102356" scrolly="-821.4399108886719" scale="0.9070294784580495">
+    <block xmlns="https://developers.google.com/blockly/xml" type="whenHovered" id="0W#_P$2;0k(-jy{zwxU4" x="-850" y="-250">
+      <mutation xmlns="http://www.w3.org/1999/xhtml" adveventoptions="false"></mutation>
+      <field name="X_RAY">FALSE</field>
+      <value name="VALUE">
+        <block type="objectList" id="p$PthKd2Pm+vsW7;=m2U">
+          <field name="FIELDNAME">Door.001</field>
+        </block>
+      </value>
+      <statement name="DO_OVER">
+        <block type="setHTMLElemStyle" id="]n?)MNqSWtaUOGT8onV5">
+          <field name="PROPERTY">cursor</field>
+          <field name="PARENT">FALSE</field>
+          <value name="VALUE">
+            <block type="text" id="[YhT.Nx%Rzwrb#Fpm{X.">
+              <field name="TEXT">pointer</field>
+            </block>
+          </value>
+          <value name="ID">
+            <block type="DOMObjectSelector" id="Nw]Q;ZJL{9~T!i}_O[ti">
+              <field name="DOM_OBJECT">BODY</field>
+            </block>
+          </value>
+          <next>
+            <block type="outline" id="BC2g-?!}kwT9o8;0`Y1@">
+              <field name="DO_WHAT">ENABLE</field>
+              <value name="TARGET">
+                <shadow type="objectList" id="Z;G/m=@nJL`Jb6u6BqQ}">
+                  <field name="FIELDNAME">Door.001</field>
+                </shadow>
+                <block type="objectList" id="nz@`@cl8-d`DQ:4pzx4F">
+                  <field name="FIELDNAME">Door.001</field>
+                </block>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <statement name="DO_OUT">
+        <block type="setHTMLElemStyle" id="ejK_;SU8$#-g4DZ=tw1F">
+          <field name="PROPERTY">cursor</field>
+          <field name="PARENT">FALSE</field>
+          <value name="VALUE">
+            <block type="text" id="fKhjyLi=[,O{Qov|HO[+">
+              <field name="TEXT">default</field>
+            </block>
+          </value>
+          <value name="ID">
+            <block type="DOMObjectSelector" id="=IZ3:JLtEP/Ab?:0{Lu0">
+              <field name="DOM_OBJECT">BODY</field>
+            </block>
+          </value>
+          <next>
+            <block type="outline" id="XgdLuvlvInRX?8K=jx~t">
+              <field name="DO_WHAT">DISABLE</field>
+              <value name="TARGET">
+                <shadow type="objectList" id="ZW/D*tX7$sO;26^j2{Wq">
+                  <field name="FIELDNAME">Door.001</field>
+                </shadow>
+                <block type="objectList" id="=K]@MBk%!5%]ZVF_a$0w">
+                  <field name="FIELDNAME">Door.001</field>
+                </block>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="whenHovered" id="v#;IViq:P:KsbKHXRvGL">
+          <mutation xmlns="http://www.w3.org/1999/xhtml" adveventoptions="false"></mutation>
+          <field name="X_RAY">FALSE</field>
+          <value name="VALUE">
+            <block type="objectList" id="JjQglt^|i:*c4t{L7`Tr">
+              <field name="FIELDNAME">Door.002</field>
+            </block>
+          </value>
+          <statement name="DO_OVER">
+            <block type="setHTMLElemStyle" id="gH~Y1gizGFh_4Sk?pQ`A">
+              <field name="PROPERTY">cursor</field>
+              <field name="PARENT">FALSE</field>
+              <value name="VALUE">
+                <block type="text" id="m~2Kh5pQQHV5J@`T3hpM">
+                  <field name="TEXT">pointer</field>
+                </block>
+              </value>
+              <value name="ID">
+                <block type="DOMObjectSelector" id="^tH-0ZPi}0dO[rGnt2ZF">
+                  <field name="DOM_OBJECT">BODY</field>
+                </block>
+              </value>
+              <next>
+                <block type="outline" id="o2JM8-64OQR++7/`@qQA">
+                  <field name="DO_WHAT">ENABLE</field>
+                  <value name="TARGET">
+                    <shadow type="objectList">
+                      <field name="FIELDNAME">Door.001</field>
+                    </shadow>
+                    <block type="objectList" id="x{u5tC^PqJIw!XsLDST+">
+                      <field name="FIELDNAME">Door.002</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+          <statement name="DO_OUT">
+            <block type="setHTMLElemStyle" id="TP~damLk:6N}k|U+,^o*">
+              <field name="PROPERTY">cursor</field>
+              <field name="PARENT">FALSE</field>
+              <value name="VALUE">
+                <block type="text" id="5Vs#]{DkOGu+{aBGlB$%">
+                  <field name="TEXT">default</field>
+                </block>
+              </value>
+              <value name="ID">
+                <block type="DOMObjectSelector" id="F;KBBq$AR*7[Y-92$0(:">
+                  <field name="DOM_OBJECT">BODY</field>
+                </block>
+              </value>
+              <next>
+                <block type="outline" id="{Ab@?a*SE~zUOV%jP-4C">
+                  <field name="DO_WHAT">DISABLE</field>
+                  <value name="TARGET">
+                    <shadow type="objectList">
+                      <field name="FIELDNAME">Door.001</field>
+                    </shadow>
+                    <block type="objectList" id="U]@_9MmQNC=ZwKN%U,l_">
+                      <field name="FIELDNAME">Door.002</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+          <next>
+            <block type="whenHovered" id="g6$+gT).eA5RapTqVYX2">
+              <mutation xmlns="http://www.w3.org/1999/xhtml" adveventoptions="false"></mutation>
+              <field name="X_RAY">FALSE</field>
+              <value name="VALUE">
+                <block type="objectList" id="}cHjRM^AP5Y![zx$d|4B">
+                  <field name="FIELDNAME">Door.003</field>
+                </block>
+              </value>
+              <statement name="DO_OVER">
+                <block type="setHTMLElemStyle" id="lAf{Ugi4a;BR:gI_MAJq">
+                  <field name="PROPERTY">cursor</field>
+                  <field name="PARENT">FALSE</field>
+                  <value name="VALUE">
+                    <block type="text" id="ghc18NXn9*L76fXqhsEI">
+                      <field name="TEXT">pointer</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <block type="DOMObjectSelector" id="f=:L4[YbP@]ktpFX9i|1">
+                      <field name="DOM_OBJECT">BODY</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="outline" id="w`S20IeUP_re/XGA|qlf">
+                      <field name="DO_WHAT">ENABLE</field>
+                      <value name="TARGET">
+                        <shadow type="objectList">
+                          <field name="FIELDNAME">Door.001</field>
+                        </shadow>
+                        <block type="objectList" id="8iDa=Ws@5VP!@XudL?2f">
+                          <field name="FIELDNAME">Door.003</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+              <statement name="DO_OUT">
+                <block type="setHTMLElemStyle" id="9h:,lLtOv@LxP2UtJ*Jb">
+                  <field name="PROPERTY">cursor</field>
+                  <field name="PARENT">FALSE</field>
+                  <value name="VALUE">
+                    <block type="text" id="PwPy$Eli7{#C/uv~W|w}">
+                      <field name="TEXT">default</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <block type="DOMObjectSelector" id="d,~9CFi3jx5z(P6Q.(*y">
+                      <field name="DOM_OBJECT">BODY</field>
+                    </block>
+                  </value>
+                  <next>
+                    <block type="outline" id="_7AW~tl-!KgY0W,EnrB]">
+                      <field name="DO_WHAT">DISABLE</field>
+                      <value name="TARGET">
+                        <shadow type="objectList">
+                          <field name="FIELDNAME">Door.001</field>
+                        </shadow>
+                        <block type="objectList" id="dP;9yufr7;~aB;~Xdn}f">
+                          <field name="FIELDNAME">Door.003</field>
+                        </block>
+                      </value>
+                    </block>
+                  </next>
+                </block>
+              </statement>
+              <next>
+                <block type="whenHovered" id="9#UZJ:Rl#!1;!=W)z]fP">
+                  <mutation xmlns="http://www.w3.org/1999/xhtml" adveventoptions="false"></mutation>
+                  <field name="X_RAY">FALSE</field>
+                  <value name="VALUE">
+                    <block type="objectList" id="uaAH_BN5VEe0eN=4jlhq">
+                      <field name="FIELDNAME">Door.004</field>
+                    </block>
+                  </value>
+                  <statement name="DO_OVER">
+                    <block type="setHTMLElemStyle" id="(4P;6QtwhrJKrU|;ass^">
+                      <field name="PROPERTY">cursor</field>
+                      <field name="PARENT">FALSE</field>
+                      <value name="VALUE">
+                        <block type="text" id="`5r2zcK{|5qw.M52r@^=">
+                          <field name="TEXT">pointer</field>
+                        </block>
+                      </value>
+                      <value name="ID">
+                        <block type="DOMObjectSelector" id="I@H]Djg+M%hj2$TML`Fr">
+                          <field name="DOM_OBJECT">BODY</field>
+                        </block>
+                      </value>
+                      <next>
+                        <block type="outline" id="Q*Mhr?uQS7A)F8JF-6Yz">
+                          <field name="DO_WHAT">ENABLE</field>
+                          <value name="TARGET">
+                            <shadow type="objectList">
+                              <field name="FIELDNAME">Door.001</field>
+                            </shadow>
+                            <block type="objectList" id=":|rg*/B3?n)(H%CR23w}">
+                              <field name="FIELDNAME">Door.004</field>
+                            </block>
+                          </value>
+                        </block>
+                      </next>
+                    </block>
+                  </statement>
+                  <statement name="DO_OUT">
+                    <block type="setHTMLElemStyle" id="CqJ#x.UPZ{/nj4$SMh^2">
+                      <field name="PROPERTY">cursor</field>
+                      <field name="PARENT">FALSE</field>
+                      <value name="VALUE">
+                        <block type="text" id="`--lbV;aR/ySOMzT^?b^">
+                          <field name="TEXT">default</field>
+                        </block>
+                      </value>
+                      <value name="ID">
+                        <block type="DOMObjectSelector" id="Th)w+)`_kc2Pv6bVI7,g">
+                          <field name="DOM_OBJECT">BODY</field>
+                        </block>
+                      </value>
+                      <next>
+                        <block type="outline" id="}PW$F0K;J3/gBs.ORLco">
+                          <field name="DO_WHAT">DISABLE</field>
+                          <value name="TARGET">
+                            <shadow type="objectList">
+                              <field name="FIELDNAME">Door.001</field>
+                            </shadow>
+                            <block type="objectList" id="B,7Hjb9giuC{N4|iVOqN">
+                              <field name="FIELDNAME">Door.004</field>
+                            </block>
+                          </value>
+                        </block>
+                      </next>
+                    </block>
+                  </statement>
+                  <next>
+                    <block type="whenHovered" id="ON`8Uc:%x%H}=uge^S^K">
+                      <mutation xmlns="http://www.w3.org/1999/xhtml" adveventoptions="false"></mutation>
+                      <field name="X_RAY">FALSE</field>
+                      <value name="VALUE">
+                        <block type="objectList" id="Ski+SK?q3nm*eGZR!;5l">
+                          <field name="FIELDNAME">Door.005</field>
+                        </block>
+                      </value>
+                      <statement name="DO_OVER">
+                        <block type="setHTMLElemStyle" id="A6G~#LUg.970J;W.KlH)">
+                          <field name="PROPERTY">cursor</field>
+                          <field name="PARENT">FALSE</field>
+                          <value name="VALUE">
+                            <block type="text" id="$}j6[oQP9{@-pT8~[]ML">
+                              <field name="TEXT">pointer</field>
+                            </block>
+                          </value>
+                          <value name="ID">
+                            <block type="DOMObjectSelector" id="mkJ[$`F7;ge6%/}Hqog2">
+                              <field name="DOM_OBJECT">BODY</field>
+                            </block>
+                          </value>
+                          <next>
+                            <block type="outline" id="8*d3u5$+{tyS.jO#ChE{">
+                              <field name="DO_WHAT">ENABLE</field>
+                              <value name="TARGET">
+                                <shadow type="objectList">
+                                  <field name="FIELDNAME">Door.001</field>
+                                </shadow>
+                                <block type="objectList" id="U`SmEmI+s5:=sH5H#7Sm">
+                                  <field name="FIELDNAME">Door.005</field>
+                                </block>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </statement>
+                      <statement name="DO_OUT">
+                        <block type="setHTMLElemStyle" id="a{_y}t5@R+2qN8EcL*Eb">
+                          <field name="PROPERTY">cursor</field>
+                          <field name="PARENT">FALSE</field>
+                          <value name="VALUE">
+                            <block type="text" id="R~cSV#YbQ$XYY:AH+vXh">
+                              <field name="TEXT">default</field>
+                            </block>
+                          </value>
+                          <value name="ID">
+                            <block type="DOMObjectSelector" id="$u~[n%@Jg;d7tt:9D)NJ">
+                              <field name="DOM_OBJECT">BODY</field>
+                            </block>
+                          </value>
+                          <next>
+                            <block type="outline" id="%@/|[`P=7GKW51G/v2Y1">
+                              <field name="DO_WHAT">DISABLE</field>
+                              <value name="TARGET">
+                                <shadow type="objectList">
+                                  <field name="FIELDNAME">Door.001</field>
+                                </shadow>
+                                <block type="objectList" id="PA#LyqHhb_@*+.u8NM*L">
+                                  <field name="FIELDNAME">Door.005</field>
+                                </block>
+                              </value>
+                            </block>
+                          </next>
+                        </block>
+                      </statement>
+                    </block>
+                  </next>
+                </block>
+              </next>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="eventHTMLElem" id="VMjc0v:x*O9/v/h=%]OS" x="-790" y="770">
+      <field name="EVENT">mouseover</field>
+      <field name="PARENT">TRUE</field>
+      <value name="ID">
+        <shadow type="text" id="))SIK,szUxJXIEgrTvN$">
+          <field name="TEXT">Color01</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <block type="setHTMLElemStyle" id="Jk*)KE0M*kmjT1o6)+pK">
+          <field name="PROPERTY">cursor</field>
+          <field name="PARENT">TRUE</field>
+          <value name="VALUE">
+            <block type="text" id="*c!Uq9}(XI=+k1diycKk">
+              <field name="TEXT">pointer</field>
+            </block>
+          </value>
+          <value name="ID">
+            <shadow type="text" id="FOTv}.7m^S?8B8Qjmd|!">
+              <field name="TEXT">Color01</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="setHTMLElemStyle" id="b`d12[cyFKw8p~5RBrXN">
+              <field name="PROPERTY">display</field>
+              <field name="PARENT">TRUE</field>
+              <value name="ID">
+                <shadow type="text" id="C9+)_;LEa=%i!UOPONl~">
+                  <field name="TEXT">Color01Text</field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="eventHTMLElem" id="(}Qmz[9:WqdN%peoRSFg">
+          <field name="EVENT">mouseout</field>
+          <field name="PARENT">TRUE</field>
+          <value name="ID">
+            <shadow type="text" id="WpU6XqQ;5Ih;`G@/gI6_">
+              <field name="TEXT">Color01</field>
+            </shadow>
+          </value>
+          <statement name="DO">
+            <block type="setHTMLElemStyle" id="Uj`a;d9o:};$rwq%oEn.">
+              <field name="PROPERTY">cursor</field>
+              <field name="PARENT">TRUE</field>
+              <value name="VALUE">
+                <block type="text" id="Vbdi{Opa.1kY/lUfl/!y">
+                  <field name="TEXT">default</field>
+                </block>
+              </value>
+              <value name="ID">
+                <shadow type="text" id="5CD4$0I41DPmk._%dlmu">
+                  <field name="TEXT">Color01</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="setHTMLElemStyle" id="qV*E`ES7L~)+N,NvmP:)">
+                  <field name="PROPERTY">display</field>
+                  <field name="PARENT">TRUE</field>
+                  <value name="VALUE">
+                    <block type="text" id=";w.jA`to1`iE$XUc59]@">
+                      <field name="TEXT">none</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <shadow type="text" id="9ck_YY2d2XLntivyB.*}">
+                      <field name="TEXT">Color01Text</field>
+                    </shadow>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="eventHTMLElem" id="=9a)5)bNEls:-e1stZvv" x="-790" y="1110">
+      <field name="EVENT">mouseover</field>
+      <field name="PARENT">TRUE</field>
+      <value name="ID">
+        <shadow type="text" id="-4VYx6_-nPhBE`i3P(wK">
+          <field name="TEXT">Color02</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <block type="setHTMLElemStyle" id="h{y1=JX#WdsF/5z5vyUr">
+          <field name="PROPERTY">cursor</field>
+          <field name="PARENT">TRUE</field>
+          <value name="VALUE">
+            <block type="text" id="beok}oIx#3.%.EM}hrfU">
+              <field name="TEXT">pointer</field>
+            </block>
+          </value>
+          <value name="ID">
+            <shadow type="text" id="PY)t,Sn1;Co:4}hhGEEo">
+              <field name="TEXT">Color02</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="setHTMLElemStyle" id="4qWR@!.?|_G,]*M3V3Dm">
+              <field name="PROPERTY">display</field>
+              <field name="PARENT">TRUE</field>
+              <value name="ID">
+                <shadow type="text" id="[;oP;%ytlF;L9T(,R=+.">
+                  <field name="TEXT">Color02Text</field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="eventHTMLElem" id="sA!ta_yt6%v~v/!rT6Bj">
+          <field name="EVENT">mouseout</field>
+          <field name="PARENT">TRUE</field>
+          <value name="ID">
+            <shadow type="text" id="0O}PO4f5e)UGIiAg;P90">
+              <field name="TEXT">Color02</field>
+            </shadow>
+          </value>
+          <statement name="DO">
+            <block type="setHTMLElemStyle" id="1=PtfKd=Si$7+I^n/:|0">
+              <field name="PROPERTY">cursor</field>
+              <field name="PARENT">TRUE</field>
+              <value name="VALUE">
+                <block type="text" id="_2(myL4*TT|-AMb_0A42">
+                  <field name="TEXT">default</field>
+                </block>
+              </value>
+              <value name="ID">
+                <shadow type="text" id="^5q7BHj0Yq@4;h$eRek7">
+                  <field name="TEXT">Color02</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="setHTMLElemStyle" id="T%KF!m7-y]9!AkfbGqzW">
+                  <field name="PROPERTY">display</field>
+                  <field name="PARENT">TRUE</field>
+                  <value name="VALUE">
+                    <block type="text" id="qm,Q,v8JpC_m,!_VA+TA">
+                      <field name="TEXT">none</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <shadow type="text" id="#_;WNmftP|k]tg:nK(F0">
+                      <field name="TEXT">Color02Text</field>
+                    </shadow>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+    <block xmlns="https://developers.google.com/blockly/xml" type="eventHTMLElem" id="H|e~wz:m8ee9Ks%F~@s~" x="-790" y="1410">
+      <field name="EVENT">mouseover</field>
+      <field name="PARENT">TRUE</field>
+      <value name="ID">
+        <shadow type="text" id="|,ovxFqXs*f?_}s{`@Zp">
+          <field name="TEXT">Color03</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <block type="setHTMLElemStyle" id="t^^}|U`4Ccf_vCI^L?R+">
+          <field name="PROPERTY">cursor</field>
+          <field name="PARENT">TRUE</field>
+          <value name="VALUE">
+            <block type="text" id="=:Us=~%^fF`VxhGbQ8x%">
+              <field name="TEXT">pointer</field>
+            </block>
+          </value>
+          <value name="ID">
+            <shadow type="text" id="^qGJH@ch`Qu|]X;1IqyZ">
+              <field name="TEXT">Color03</field>
+            </shadow>
+          </value>
+          <next>
+            <block type="setHTMLElemStyle" id="hNwq_Zr?848`n4K%:XW_">
+              <field name="PROPERTY">display</field>
+              <field name="PARENT">TRUE</field>
+              <value name="ID">
+                <shadow type="text" id="Fk2BItPwb(|Ik$e*mW+S">
+                  <field name="TEXT">Color03Text</field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="eventHTMLElem" id="hR:4y,F-8aksGrTonn0[">
+          <field name="EVENT">mouseout</field>
+          <field name="PARENT">TRUE</field>
+          <value name="ID">
+            <shadow type="text" id="2`hzqR5Pd~Je{@=Vlr.o">
+              <field name="TEXT">Color03</field>
+            </shadow>
+          </value>
+          <statement name="DO">
+            <block type="setHTMLElemStyle" id="v)Q}~;oKlT18|0Z5;/~j">
+              <field name="PROPERTY">cursor</field>
+              <field name="PARENT">TRUE</field>
+              <value name="VALUE">
+                <block type="text" id="#6lTph/X2;o(r`m+HwXR">
+                  <field name="TEXT">default</field>
+                </block>
+              </value>
+              <value name="ID">
+                <shadow type="text" id="Ke:bxP%BAVkjg#lsD2`H">
+                  <field name="TEXT">Color03</field>
+                </shadow>
+              </value>
+              <next>
+                <block type="setHTMLElemStyle" id="Ybc@5Tb)cIUF*b7jT!=/">
+                  <field name="PROPERTY">display</field>
+                  <field name="PARENT">TRUE</field>
+                  <value name="VALUE">
+                    <block type="text" id="2NYy|e68/Fv(5:VD0lBI">
+                      <field name="TEXT">none</field>
+                    </block>
+                  </value>
+                  <value name="ID">
+                    <shadow type="text" id="+U:*:)Yf/qxM6*Wy{~Yg">
+                      <field name="TEXT">Color03Text</field>
+                    </shadow>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+  </tab>
+  <editorsettings viewport-x="928" viewport-y="12" viewport-w="768" viewport-h="473.5" viewport-hidden="false" toolbox-library-mode="false" toolbox-minimized-mode="false"></editorsettings>
+</xml>
