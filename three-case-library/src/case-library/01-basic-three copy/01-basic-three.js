@@ -39,7 +39,7 @@ const params = {
 };
 
 const modelsApi = { modelsList: 'Watch_L2115' }
-const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Bicyle_B16'];
+const modelsStats = ['Watch_L2115', 'Watch_1009872', 'Necklace_Greek', 'Bicyle_B16', 'Car_H9', 'ZZJK', 'Monkey'];
 
 
 //init
@@ -171,12 +171,12 @@ function init() {
 
             window.innerWidth / window.innerHeight,
 
-            obj.minBox3Size / 100, obj.maxBox3Size * 10
+            obj.minBox3Size / 5, obj.maxBox3Size * 50
 
         );
 
         //todo 动态设置相机位置
-        camera.position.set(-obj.maxBox3Size, obj.vector3.y / 2, obj.maxBox3Size);
+        camera.position.set(-obj.maxBox3Size / 1.5, obj.vector3.y / 2, obj.maxBox3Size / 1.5);
 
         //todo 动态设置相机目标点为为外包盒中心，场景中有轨道控制器的话也需要同步修改
         camera.lookAt(obj.box3Center.x, obj.box3Center.y, obj.box3Center.z);
@@ -217,7 +217,7 @@ function init() {
         renderer.colorSpace = THREE.SRGBColorSpace;
 
         //!toneMapping能够塑造更真实的物理效果
-        renderer.toneMapping = THREE.CineonToneMapping;
+        renderer.toneMapping = THREE.LinearToneMapping;
 
         //!设置toneMapping曝光度
         renderer.toneMappingExposure = 1;
@@ -242,8 +242,8 @@ function init() {
         );
         //!动态设置controls的可控范围
         controls.maxPolarAngle = Math.PI * 2;
-        controls.minDistance = obj.maxBox3Size / 5;
-        controls.maxDistance = obj.maxBox3Size * 5;
+        controls.minDistance = obj.maxBox3Size / 4;
+        controls.maxDistance = obj.maxBox3Size * 4;
 
 
         //todo 添加后期bloom光晕
