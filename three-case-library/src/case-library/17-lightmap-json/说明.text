@@ -1,0 +1,11 @@
+app2.json是通过threejs编辑器发布出来的，删除了多余的相机和场景层级
+
+"envMapIntensity": 0.075,可以避免灯光贴图与环境贴图的亮度叠加，造成材质亮度过亮的问题，同时也能保证体现材质的反射效果，目前只找到这种方式。
+
+若希望场景中物体保持相对一致的照明（不包含反射效果），未配置灯光贴图的材质 envMapIntensity 属性也需要设置为 1，当然一般不配置灯光贴图的材质多为自发光材质可自行调节亮度以匹配。
+
+lightmap需要使用贴图"channel": 1，导出GLB文件需事先占位UV通道2。在 .json 文件中复制占位贴图的 uuid 并替换xxxx "lightMap": "xxxx",且需添加 "lightMapIntensity": 1,材质中的占位通道代码需删除。
+
+加载 .json 文件需使用 THREE.ObjectLoader()
+
+.json文件压缩网站 https://www.bejson.com/zhuanyi/
