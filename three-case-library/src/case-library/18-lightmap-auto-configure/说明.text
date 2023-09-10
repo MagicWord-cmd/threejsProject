@@ -1,20 +1,11 @@
-vite环境搭建
-课程：nodejs + vitejs + threejs
+lightMap流程自动配置
 
-1.安装 nodejs http://nodejs.org/
-    验证：node -v
+lightMap使用模型的uv通道2进行烘焙。
 
-2.创建vite项目：
-    npm create vite@latest
+lightMap使用 material.clearcoatMap 属性进行占位输出。
 
-3. cd vite-threejs-project
-    npm i vite three
+代码运行时将遍历材质，并自动配置材质 lightMap。
 
-4.运行： npm run dev
-================================================================================
-threejs 开发总结：
-    1.mesh, light, helper 需要加入 scene
-    2.scene, camera, light, render, 四元素
-    3.orbitControls 控制的是 camera(eyes)
+材质的其他属性需要在blender中按需设置。
 
-  
+使用lightMap Batch Bake 0.5.0.ms插件,可在3Dmax中进行批量烘焙。

@@ -70,7 +70,7 @@ gltfLoader.load('lightMapAutoConfigure.glb',
                     object.material.lightMap = object.material.clearcoatMap.clone();
                     object.material.clearcoatMap = null;
                     object.material.clearcoatRoughness = 1;
-                    object.material.lightMapIntensity = 3;
+                    object.material.lightMapIntensity = 2;
                     object.material.envMapIntensity = 0.075;
                 }
 
@@ -199,7 +199,7 @@ function init(closured) {
     renderer.toneMapping = THREE.LinearToneMapping;
 
     //!设置toneMapping曝光度
-    renderer.toneMappingExposure = 1;
+    renderer.toneMappingExposure = 0.5;
 
     document.body.appendChild(renderer.domElement);
 
