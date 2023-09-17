@@ -44,7 +44,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
-gltfLoader.load('lightMapAutoConfigure.glb',
+gltfLoader.load('数字阅读.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
@@ -70,8 +70,8 @@ gltfLoader.load('lightMapAutoConfigure.glb',
                     object.material.lightMap = object.material.clearcoatMap.clone();
                     object.material.clearcoatMap = null;
                     object.material.clearcoatRoughness = 1;
-                    object.material.lightMapIntensity = 2;
-                    object.material.envMapIntensity = 0.075;
+                    object.material.lightMapIntensity = 1;
+                    object.material.envMapIntensity = 0.05;
                 }
 
                 //emissiveMap
@@ -199,7 +199,7 @@ function init(closured) {
     renderer.toneMapping = THREE.LinearToneMapping;
 
     //!设置toneMapping曝光度
-    renderer.toneMappingExposure = 0.5;
+    renderer.toneMappingExposure = 1;
 
     document.body.appendChild(renderer.domElement);
 

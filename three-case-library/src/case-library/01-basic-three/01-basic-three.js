@@ -44,7 +44,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
-gltfLoader.load('lightMap.glb',
+gltfLoader.load('打谷机.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
