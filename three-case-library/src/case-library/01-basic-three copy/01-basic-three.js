@@ -109,37 +109,11 @@ function init() {
             box3.getCenter(box3Center);
 
             //todo 获取包围盒尺寸的最小值
-            let minBox3Size = 0;
-            if (vector3.x < vector3.y) {
-                if (vector3.x < vector3.z) {
-                    minBox3Size = vector3.x;
-                } else {
-                    minBox3Size = vector3.z;
-                }
-            } else {
-                if (vector3.y < vector3.z) {
-                    minBox3Size = vector3.y;
-                } else {
-                    minBox3Size = vector3.z;
-                }
-            }
+            let minBox3Size = Math.min(vector3.x, vector3.y, vector3.z);
 
 
             //todo 获取包围盒尺寸的最大值
-            let maxBox3Size = 0;
-            if (vector3.x > vector3.y) {
-                if (vector3.x > vector3.z) {
-                    maxBox3Size = vector3.x;
-                } else {
-                    maxBox3Size = vector3.z;
-                }
-            } else {
-                if (vector3.y > vector3.z) {
-                    maxBox3Size = vector3.y;
-                } else {
-                    maxBox3Size = vector3.z;
-                }
-            }
+            let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
 
             //todo 闭包函数，向外传输局部变量
             let closure = function () {

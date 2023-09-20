@@ -44,7 +44,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
-gltfLoader.load('打谷机.glb',
+gltfLoader.load('lightMap.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
@@ -108,7 +108,7 @@ gltfLoader.load('打谷机.glb',
         box3.getCenter(box3Center);
 
         //todo 获取包围盒尺寸的最小值
-        let minBox3Size = Math.max(vector3.x, vector3.y, vector3.z);
+        let minBox3Size = Math.min(vector3.x, vector3.y, vector3.z);
         // if (vector3.x < vector3.y) {
         //     if (vector3.x < vector3.z) {
         //         minBox3Size = vector3.x;
@@ -125,7 +125,7 @@ gltfLoader.load('打谷机.glb',
 
 
         //todo 获取包围盒尺寸的最大值
-        let maxBox3Size = Math.min(vector3.x, vector3.y, vector3.z);;
+        let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
         // if (vector3.x > vector3.y) {
         //     if (vector3.x > vector3.z) {
         //         maxBox3Size = vector3.x;
