@@ -21,6 +21,7 @@ let camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 );
+let explosionePosition;
 //todo声明摄像机父级Group，以实现摄像机绕焦点旋转
 const cameraControls = new THREE.Group();
 cameraControls.add(camera);
@@ -103,15 +104,15 @@ function init() {
 	cameraControls.rotation.order = 'YXZ';
 
 	/*	  scene 	*/
-	scene.background = new THREE.Color(0x111111);
-	scene.add(new THREE.AxesHelper(10));
+	scene.background = new THREE.Color(0x000000);
+	// scene.add(new THREE.AxesHelper(10));
 
 	/*    stats    */
 	document.body.appendChild(stats.dom);
 
 	/*    hemisphereLight    */
 	const hemisphereLight = new THREE.HemisphereLight(	//半球光（不能投射阴影）
-		0xffffff,	//天空
+		0x333366,	//天空
 		0x002244,	//地面
 		0.75		//亮度
 	);
@@ -119,7 +120,7 @@ function init() {
 	scene.add(hemisphereLight);
 
 	/*	 directionalLight	*/
-	const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+	const directionalLight = new THREE.DirectionalLight(0x333366, 0.75);
 	directionalLight.position.set(-15, 25, 15);
 	directionalLight.castShadow = true;
 	directionalLight.shadow.camera.near = 0.01;
@@ -154,49 +155,7 @@ function init() {
 				scene.add(octreeHelper);
 			});
 		}
-	)
-
-	/*	 烟花	*/
-	const fireworksMap = new THREE.TextureLoader().load('/textures/sprites/fireworks/fireworks(5x4)_002.jpg');
-	const time = timerLocal();
-	const fireworksUV = spritesheetUV(
-		vec2(5, 4), // count
-		pointUV, // uv
-		time.mul(12) // current frame
 	);
-	const fireworksTextureSub = texture(fireworksMap, fireworksUV);
-	const fireworksColorNode = fireworksTextureSub.mul( 1.5 );
-	const fireworksMaterial = new PointsNodeMaterial({
-		depthWrite: false,
-		transparent: true,
-		sizeAttenuation: true,
-		blending: 1,
-		// dithering:true,
-	});
-	console.log('fireworksMaterial.blending', fireworksMaterial.blending);
-
-	// fireworksMaterial.color = new THREE.Color(0xffff00);
-	// fireworksMaterial.colorNode =  fireworksColorNode.mul(fireworksMaterial.color);
-	fireworksMaterial.colorNode =  fireworksColorNode
-	fireworksMaterial.opacityNode = fireworksColorNode;
-	fireworksMaterial.size = 10;
-	const fireworksGeometry = new THREE.BufferGeometry();
-	const vertices = new Float32Array([
-		0, 0, 0
-	]);
-	fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-	const fireworksParticles = new THREE.Points(fireworksGeometry, fireworksMaterial);
-	fireworksParticles.position.set(0, 10, -15);
-	scene.add(fireworksParticles);
-	console.log('fireworksParticles', fireworksParticles);
-	console.log('fireworksMaterial', fireworksMaterial);
-
-
-
-
-
-
-
 
 	/*	 创建文字精灵	*/
 	let getTextCanvas = function (text) {
@@ -248,7 +207,7 @@ function init() {
 					//emissiveMap
 					if (object.material.emissive || object.material.emissiveMap) {
 
-						object.material.emissiveIntensity = 1;
+						object.material.emissiveIntensity = 0.2;
 						if (object.material.emissiveMap) {
 							object.material.emissiveMap.colorSpace = THREE.SRGBColorSpace;
 						}
@@ -614,11 +573,127 @@ function playerColliderCollisions() {
 
 }
 
+
+/*	 穿天猴firecracker	*/
+let firecrackerVelocityY = Math.random() * 0.25 + 2.25;
+let firecrackerMap = new THREE.TextureLoader().load("/textures/sprites/circle.png");
+let firecrackerMaterial = new THREE.SpriteMaterial({
+	map: firecrackerMap,
+	color: 0xffaa00,
+});
+let firecrackerSprite = new THREE.Sprite(firecrackerMaterial);
+firecrackerSprite.scale.set(0.1, 0.5, 0.1);
+firecrackerSprite.position.set(Math.random()*2, 0, Math.random()*2-15);
+scene.add(firecrackerSprite);
+
+async function updateFirecracker(deltaTime) {
+
+	firecrackerVelocityY -= GRAVITY * deltaTime * 0.33;
+	// console.log(firecrackerVelocityY);
+	firecrackerSprite.position.y += firecrackerVelocityY;
+
+	//todo 获取firecrackerSprite的销毁时的位置，下面用来设置fireworksParticle的位置。
+	explosionePosition = firecrackerSprite.position
+	scene.remove(firecrackerSprite);
+	return explosionePosition;
+
+}
+
+/*	 烟花	*/
+const fireworksMaps = [
+	'T_SS(4x4)_fireworks001',
+	'T_SS(4x4)_fireworks002',
+	'T_SS(4x4)_fireworks003',
+	'T_SS(5x4)_fireworks001',
+	'T_SS(5x4)_fireworks002',
+	'T_SS(5x4)_fireworks003',
+	'T_SS(5x4)_fireworks004',
+	'T_SS(5x4)_fireworks005',
+	'T_SS(5x4)_fireworks006',
+	'T_SS(5x4)_fireworks007',
+	'T_SS(5x5)_fireworks001',
+	'T_SS(5x5)_fireworks002',
+	'T_SS(5x5)_fireworks003',
+	'T_SS(5x5)_fireworks004',
+	'T_SS(5x5)_fireworks005',
+	'T_SS(5x5)_fireworks006',
+	'T_SS(6x5)_fireworks001',
+];
+let fireworksParticle, sheetDuration;
+
+// 初始化烟花系统
+function initFireworksSystem(explosionePosition) {
+
+	//随机加载一张图片，并根据图片名称识别图片矩阵数
+	const texName = fireworksMaps[parseInt(Math.random() * fireworksMaps.length)];
+	const fireworksMap = new THREE.TextureLoader().load('/textures/sprites/fireworks/' + texName + '.jpg');
+	const sheetU = Number(texName.substring(5, 6));
+	const sheetV = Number(texName.substring(7, 8));
+
+	// 烟花播放帧数率
+	const sheetFPS = Math.random() * 5 + 10;
+
+	//todo 图片矩阵总数除以每秒切换张数，就是烟花的播放时长，之后用来控制烟花销毁时机
+	sheetDuration = sheetU * sheetV / sheetFPS;
+
+	const time = timerLocal();
+	const fireworksUV = spritesheetUV(
+		vec2(sheetU, sheetV), // count
+		pointUV, // uv
+		time.mul(sheetFPS) // current frame
+	);
+
+	const fireworksTextureSub = texture(fireworksMap, fireworksUV);
+	const fireworksColorNode = fireworksTextureSub.mul(1);	//亮度
+	const fireworksMaterial = new PointsNodeMaterial({
+		depthWrite: false,
+		transparent: true,
+		sizeAttenuation: true,
+		blending: 1,
+	});
+	fireworksMaterial.colorNode = fireworksColorNode
+	fireworksMaterial.opacityNode = fireworksColorNode;
+	fireworksMaterial.size = Math.random() * 3 + 10;
+	const fireworksGeometry = new THREE.BufferGeometry();
+	const vertices = new Float32Array([0, 0, 0]);
+	fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+	fireworksParticle = new THREE.Points(fireworksGeometry, fireworksMaterial);
+	fireworksParticle.position.set(0, 10, -15);
+	// fireworksParticle.position = explosionePosition;
+	scene.add(fireworksParticle);
+
+	//todo 闭包函数，向removeFireworksSystem()传输变量
+	let closure = function () {
+		return {
+			'sheetDuration': sheetDuration
+		};
+	}
+	removeFireworksSystem(closure);
+}
+
+// 销毁烟花系统
+function removeFireworksSystem(closure) {
+
+	//todo 声名变量接受闭包传过来的参数,在sheetUV播放完成时销毁烟花
+	let obj = closure();
+	setTimeout(function () {
+		scene.remove(fireworksParticle);
+	}, obj.sheetDuration * 1000);
+}
+
+initFireworksSystem();
+
+
+
+
+
 /*	  animate 	*/
 function animate() {
 
 	//需要根据键盘按下的时间来计算处理的程度，需要一个时间的变量
 	const deltaTime = Math.min(0.05, clock.getDelta());//todo为避免为0，指定最小值
+
+
 
 	handleControls(deltaTime);//调用键盘控制相关
 
@@ -632,6 +707,8 @@ function animate() {
 
 	cameraAdaptive()
 
+	updateFirecracker(deltaTime)
+	// console.log(explosionePosition);
 	//! 更新nodeFrame贴图动画才有效果
 	nodeFrame.update();
 

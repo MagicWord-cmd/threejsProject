@@ -96,8 +96,6 @@ gltfLoader.load('lightMap.glb',
 
         });
 
-        
-
 
         //todo Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值
         let box3 = new THREE.Box3();
@@ -109,36 +107,9 @@ gltfLoader.load('lightMap.glb',
 
         //todo 获取包围盒尺寸的最小值
         let minBox3Size = Math.min(vector3.x, vector3.y, vector3.z);
-        // if (vector3.x < vector3.y) {
-        //     if (vector3.x < vector3.z) {
-        //         minBox3Size = vector3.x;
-        //     } else {
-        //         minBox3Size = vector3.z;
-        //     }
-        // } else {
-        //     if (vector3.y < vector3.z) {
-        //         minBox3Size = vector3.y;
-        //     } else {
-        //         minBox3Size = vector3.z;
-        //     }
-        // }
-
 
         //todo 获取包围盒尺寸的最大值
         let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
-        // if (vector3.x > vector3.y) {
-        //     if (vector3.x > vector3.z) {
-        //         maxBox3Size = vector3.x;
-        //     } else {
-        //         maxBox3Size = vector3.z;
-        //     }
-        // } else {
-        //     if (vector3.y > vector3.z) {
-        //         maxBox3Size = vector3.y;
-        //     } else {
-        //         maxBox3Size = vector3.z;
-        //     }
-        // }
 
         //todo 闭包函数，向外传输局部变量
         let closure = function () {
