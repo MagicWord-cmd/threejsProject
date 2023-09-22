@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import Proton from 'three.proton.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -14,10 +13,7 @@ import { Capsule } from 'three/addons/math/Capsule.js';
 import { attribute, timerLocal, positionLocal, spritesheetUV, pointUV, vec2, texture, uniform, mix, PointsNodeMaterial } from 'three/nodes';
 import { nodeFrame } from 'three/addons/renderers/webgl/nodes/WebGLNodes.js';
 
-
-
 /*    scene/camera/stats    */
-
 let renderer = new THREE.WebGLRenderer({ antialias: true });
 let camera = new THREE.PerspectiveCamera(
 	70,
@@ -25,6 +21,7 @@ let camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000
 );
+let explosionePosition;
 //todo声明摄像机父级Group，以实现摄像机绕焦点旋转
 const cameraControls = new THREE.Group();
 cameraControls.add(camera);
@@ -577,51 +574,118 @@ function playerColliderCollisions() {
 }
 
 
+/*	 穿天猴firecracker	*/
+let firecrackerVelocityY = Math.random() * 0.25 + 2.25;
+let firecrackerMap = new THREE.TextureLoader().load("/textures/sprites/circle.png");
+let firecrackerMaterial = new THREE.SpriteMaterial({
+	map: firecrackerMap,
+	color: 0xffaa00,
+});
+let firecrackerSprite = new THREE.Sprite(firecrackerMaterial);
+firecrackerSprite.scale.set(0.1, 0.5, 0.1);
+firecrackerSprite.position.set(Math.random()*2, 0, Math.random()*2-15);
+scene.add(firecrackerSprite);
 
+async function updateFirecracker(deltaTime) {
 
-function initProton() {
-	proton = new Proton();
-	proton.addEmitter(createEmitter());
-	proton.addRender(new Proton.SpriteRender(scene));
+	firecrackerVelocityY -= GRAVITY * deltaTime * 0.33;
+	// console.log(firecrackerVelocityY);
+	firecrackerSprite.position.y += firecrackerVelocityY;
 
-	// Proton.Debug.drawZone(proton,scene,zone2);
-	//Proton.Debug.drawEmitter(proton,scene,emitter);
+	//todo 获取firecrackerSprite的销毁时的位置，下面用来设置fireworksParticle的位置。
+	explosionePosition = firecrackerSprite.position
+	scene.remove(firecrackerSprite);
+	return explosionePosition;
+
 }
-function createSprite() {
-	var map = new THREE.TextureLoader().load("/textures/sprites/snowflake2.png");
-	var material = new THREE.SpriteMaterial({
-		map: map,
-		color: 0xffaa00,
-		blending: THREE.AdditiveBlending,
-		fog: true
+
+/*	 烟花	*/
+const fireworksMaps = [
+	'T_SS(4x4)_fireworks001',
+	'T_SS(4x4)_fireworks002',
+	'T_SS(4x4)_fireworks003',
+	'T_SS(5x4)_fireworks001',
+	'T_SS(5x4)_fireworks002',
+	'T_SS(5x4)_fireworks003',
+	'T_SS(5x4)_fireworks004',
+	'T_SS(5x4)_fireworks005',
+	'T_SS(5x4)_fireworks006',
+	'T_SS(5x4)_fireworks007',
+	'T_SS(5x5)_fireworks001',
+	'T_SS(5x5)_fireworks002',
+	'T_SS(5x5)_fireworks003',
+	'T_SS(5x5)_fireworks004',
+	'T_SS(5x5)_fireworks005',
+	'T_SS(5x5)_fireworks006',
+	'T_SS(6x5)_fireworks001',
+];
+let fireworksParticle, sheetDuration;
+
+// 初始化烟花系统
+function initFireworksSystem(explosionePosition) {
+
+	//随机加载一张图片，并根据图片名称识别图片矩阵数
+	const texName = fireworksMaps[parseInt(Math.random() * fireworksMaps.length)];
+	const fireworksMap = new THREE.TextureLoader().load('/textures/sprites/fireworks/' + texName + '.jpg');
+	const sheetU = Number(texName.substring(5, 6));
+	const sheetV = Number(texName.substring(7, 8));
+
+	// 烟花播放帧数率
+	const sheetFPS = Math.random() * 5 + 10;
+
+	//todo 图片矩阵总数除以每秒切换张数，就是烟花的播放时长，之后用来控制烟花销毁时机
+	sheetDuration = sheetU * sheetV / sheetFPS;
+
+	const time = timerLocal();
+	const fireworksUV = spritesheetUV(
+		vec2(sheetU, sheetV), // count
+		pointUV, // uv
+		time.mul(sheetFPS) // current frame
+	);
+
+	const fireworksTextureSub = texture(fireworksMap, fireworksUV);
+	const fireworksColorNode = fireworksTextureSub.mul(1);	//亮度
+	const fireworksMaterial = new PointsNodeMaterial({
+		depthWrite: false,
+		transparent: true,
+		sizeAttenuation: true,
+		blending: 1,
 	});
-	
-	return new THREE.Sprite(material);
-}
-function createEmitter() {
-	emitter = new Proton.Emitter();
-	emitter.rate = new Proton.Rate(new Proton.Span(5, 10), new Proton.Span(.1, .25));
-	emitter.addInitialize(new Proton.Mass(1));
-	emitter.addInitialize(new Proton.Radius(100));
-	emitter.addInitialize(new Proton.Life(2, 4));
-	emitter.addInitialize(new Proton.Body(createSprite()));
-	emitter.addInitialize(new Proton.Position(new Proton.BoxZone(100)));
-	emitter.addInitialize(new Proton.Velocity(200, new Proton.Vector3D(0, 1, 1), 180));
+	fireworksMaterial.colorNode = fireworksColorNode
+	fireworksMaterial.opacityNode = fireworksColorNode;
+	fireworksMaterial.size = Math.random() * 3 + 10;
+	const fireworksGeometry = new THREE.BufferGeometry();
+	const vertices = new Float32Array([0, 0, 0]);
+	fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+	fireworksParticle = new THREE.Points(fireworksGeometry, fireworksMaterial);
+	fireworksParticle.position.set(0, 10, -15);
+	// fireworksParticle.position = explosionePosition;
+	scene.add(fireworksParticle);
 
-	// //emitter.addBehaviour(new Proton.RandomDrift(30, 30, 30, .05));
-	emitter.addBehaviour(new Proton.Rotate("random", "random"));
-	emitter.addBehaviour(new Proton.Scale(1, 0.5));
-	emitter.addBehaviour(new Proton.Alpha(1, 0, Infinity, Proton.easeInQuart));
-	var zone2 = new Proton.BoxZone(400);
-	//emitter.addBehaviour(new Proton.CrossZone(zone2, "bound"));
-	//emitter.addBehaviour(new Proton.Collision(emitter,true));
-	emitter.addBehaviour(new Proton.Color(0xff0000, 'random', Infinity, Proton.easeOutQuart));
-
-	emitter.p.x = 0;
-	emitter.p.y = 0;
-	emitter.emit();
-	return emitter;
+	//todo 闭包函数，向removeFireworksSystem()传输变量
+	let closure = function () {
+		return {
+			'sheetDuration': sheetDuration
+		};
+	}
+	removeFireworksSystem(closure);
 }
+
+// 销毁烟花系统
+function removeFireworksSystem(closure) {
+
+	//todo 声名变量接受闭包传过来的参数,在sheetUV播放完成时销毁烟花
+	let obj = closure();
+	setTimeout(function () {
+		scene.remove(fireworksParticle);
+	}, obj.sheetDuration * 1000);
+}
+
+initFireworksSystem();
+
+
+
+
 
 /*	  animate 	*/
 function animate() {
@@ -629,8 +693,8 @@ function animate() {
 	//需要根据键盘按下的时间来计算处理的程度，需要一个时间的变量
 	const deltaTime = Math.min(0.05, clock.getDelta());//todo为避免为0，指定最小值
 
-	proton.update();
-	console.log(proton);
+
+
 	handleControls(deltaTime);//调用键盘控制相关
 
 	updatePlayer(deltaTime);//todo角色被操控后需要更新Player
@@ -641,8 +705,9 @@ function animate() {
 
 	stats.update();
 
-	cameraAdaptive();
+	cameraAdaptive()
 
+	updateFirecracker(deltaTime)
 	// console.log(explosionePosition);
 	//! 更新nodeFrame贴图动画才有效果
 	nodeFrame.update();

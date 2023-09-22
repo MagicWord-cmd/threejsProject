@@ -9,6 +9,7 @@ vite环境搭建
 
 3. cd vite-threejs-project
     npm i vite three
+    npm install three three.proton.js
 
 4.运行： npm run dev
 ================================================================================
@@ -17,4 +18,4 @@ threejs 开发总结：
     2.scene, camera, light, render, 四元素
     3.orbitControls 控制的是 camera(eyes)
 
-  
+  https://www.npmjs.com/package/three.proton.js
