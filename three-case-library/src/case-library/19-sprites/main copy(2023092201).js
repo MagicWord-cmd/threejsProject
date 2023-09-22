@@ -576,20 +576,20 @@ function playerColliderCollisions() {
 
 
 /*	 穿天猴firecracker	*/
-let firecrackerVelocityY = Math.random() * 0.25 + 2.25;
+let firecrackerVelocityY = Math.random() * 0.25 + 2.75;
 let firecrackerDuration = firecrackerVelocityY / (GRAVITY * 0.33);
-let explosionePositionY=(GRAVITY * 0.33)*Math.pow(firecrackerDuration,2)*0.5;
+let explosionePositionY = firecrackerVelocityY * firecrackerDuration - (GRAVITY * 0.33) * Math.pow(firecrackerDuration, 2) * 0.5;
 let firecrackerMap = new THREE.TextureLoader().load("/textures/sprites/circle.png");
 let firecrackerMaterial = new THREE.SpriteMaterial({
 	map: firecrackerMap,
 	color: 0xffaa00,
 });
 let firecrackerSprite = new THREE.Sprite(firecrackerMaterial);
-firecrackerSprite.scale.set(0.1, 0.5, 0.1);
-firecrackerSprite.position.set(Math.random() * 2, 0, Math.random() * 2 - 15);
+firecrackerSprite.scale.set(0.2, 0.5, 0.2);
+firecrackerSprite.position.set(Math.random(), 0, Math.random() - 15);
 
 //todo 计算出穿天猴的爆炸点的位置（生成点位置的Y加上向上射出的距离）
-let explosionePosition = firecrackerSprite.position.add(new THREE.Vector3(0, firecrackerVelocityY * firecrackerDuration, 0));
+let explosionePosition = firecrackerSprite.position.add(new THREE.Vector3(0, explosionePositionY, 0));
 
 scene.add(firecrackerSprite);
 async function updateFirecracker(deltaTime) {
@@ -597,12 +597,8 @@ async function updateFirecracker(deltaTime) {
 	firecrackerSprite.position.y += firecrackerVelocityY;
 	await new Promise((resolve, reject) => {
 		setTimeout(function () {
-
-			explosionePosition = firecrackerSprite.position;
 			scene.remove(firecrackerSprite);
-
-			console.log('explosionePosition', explosionePosition);
-			return
+			console.log(firecrackerDuration);
 		}, firecrackerDuration * 1000)
 	});
 }
@@ -666,12 +662,10 @@ async function FireworksSystem() {
 	const vertices = new Float32Array([0, 0, 0]);
 	fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	fireworksParticle = new THREE.Points(fireworksGeometry, fireworksMaterial);
-	fireworksParticle.position.set(0, 10, -15);
-	// fireworksParticle.position = explosionePosition;
 	await new Promise((resolve, reject) => {
 		setTimeout(function () {
 			scene.add(fireworksParticle);
-			fireworksParticle.position.set(explosionePosition.x,explosionePosition.y,explosionePosition.z);
+			fireworksParticle.position.set(explosionePosition.x, explosionePosition.y, explosionePosition.z);
 			setTimeout(() => {
 				scene.remove(fireworksParticle);
 			}, sheetDuration * 1000);
