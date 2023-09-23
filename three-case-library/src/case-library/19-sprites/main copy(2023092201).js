@@ -10,9 +10,8 @@ import { OctreeHelper } from 'three/addons/helpers/OctreeHelper.js';
 import { Capsule } from 'three/addons/math/Capsule.js';
 
 /*    sprite要用的的引入    */
-import { attribute, timerLocal, positionLocal, spritesheetUV, pointUV, vec2, texture, uniform, mix, PointsNodeMaterial } from 'three/nodes';
+import { timerLocal, spritesheetUV, pointUV, vec2, texture, PointsNodeMaterial,SpriteNodeMaterial } from 'three/nodes';
 import { nodeFrame } from 'three/addons/renderers/webgl/nodes/WebGLNodes.js';
-// import { Proton } from 'three-case-library/node_modules/three.proton/build/three.proton.js';
 
 
 /*    scene/camera/stats    */
@@ -598,35 +597,32 @@ async function updateFirecracker(deltaTime) {
 	await new Promise((resolve, reject) => {
 		setTimeout(function () {
 			scene.remove(firecrackerSprite);
-			console.log(firecrackerDuration);
 		}, firecrackerDuration * 1000)
 	});
 }
 
 /*	 烟花	*/
 let fireworksParticle, sheetDuration;
+const fireworksMaps = [
+	'T_SS(4x4)_fireworks001',
+	'T_SS(4x4)_fireworks002',
+	'T_SS(4x4)_fireworks003',
+	'T_SS(5x4)_fireworks001',
+	'T_SS(5x4)_fireworks002',
+	'T_SS(5x4)_fireworks003',
+	'T_SS(5x4)_fireworks004',
+	'T_SS(5x4)_fireworks005',
+	'T_SS(5x4)_fireworks006',
+	'T_SS(5x4)_fireworks007',
+	'T_SS(5x5)_fireworks001',
+	'T_SS(5x5)_fireworks002',
+	'T_SS(5x5)_fireworks003',
+	'T_SS(5x5)_fireworks004',
+	'T_SS(5x5)_fireworks005',
+	'T_SS(5x5)_fireworks006',
+	'T_SS(6x5)_fireworks001',
+];
 async function FireworksSystem() {
-
-	const fireworksMaps = [
-		'T_SS(4x4)_fireworks001',
-		'T_SS(4x4)_fireworks002',
-		'T_SS(4x4)_fireworks003',
-		'T_SS(5x4)_fireworks001',
-		'T_SS(5x4)_fireworks002',
-		'T_SS(5x4)_fireworks003',
-		'T_SS(5x4)_fireworks004',
-		'T_SS(5x4)_fireworks005',
-		'T_SS(5x4)_fireworks006',
-		'T_SS(5x4)_fireworks007',
-		'T_SS(5x5)_fireworks001',
-		'T_SS(5x5)_fireworks002',
-		'T_SS(5x5)_fireworks003',
-		'T_SS(5x5)_fireworks004',
-		'T_SS(5x5)_fireworks005',
-		'T_SS(5x5)_fireworks006',
-		'T_SS(6x5)_fireworks001',
-	];
-
 
 	//随机加载一张图片，并根据图片名称识别图片矩阵数
 	const texName = fireworksMaps[parseInt(Math.random() * fireworksMaps.length)];
@@ -655,6 +651,8 @@ async function FireworksSystem() {
 		sizeAttenuation: true,
 		blending: 1,
 	});
+	
+	SpriteNodeMaterial
 	fireworksMaterial.colorNode = fireworksColorNode
 	fireworksMaterial.opacityNode = fireworksColorNode;
 	fireworksMaterial.size = Math.random() * 3 + 10;
@@ -702,7 +700,7 @@ function animate() {
 	cameraAdaptive();
 
 	updateFirecracker(deltaTime);
-	// console.log(explosionePosition);
+
 	//! 更新nodeFrame贴图动画才有效果
 	nodeFrame.update();
 
