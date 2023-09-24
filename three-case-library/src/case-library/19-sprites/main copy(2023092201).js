@@ -642,7 +642,7 @@ async function FireworksSystem() {
 		pointUV, // uv
 		time.mul(sheetFPS) // current frame
 	);
-
+	
 	const fireworksTextureSub = texture(fireworksMap, fireworksUV);
 	const fireworksColorNode = fireworksTextureSub.mul(1);	//亮度
 	const fireworksMaterial = new PointsNodeMaterial({
@@ -650,12 +650,12 @@ async function FireworksSystem() {
 		transparent: true,
 		sizeAttenuation: true,
 		blending: 1,
+		colorNode:fireworksColorNode,
+		opacityNode:fireworksColorNode,
+		size:Math.random() * 3 + 10
 	});
-	
-	SpriteNodeMaterial
-	fireworksMaterial.colorNode = fireworksColorNode
-	fireworksMaterial.opacityNode = fireworksColorNode;
-	fireworksMaterial.size = Math.random() * 3 + 10;
+	console.log('fireworksUV',fireworksUV);
+	console.log('fireworksTextureSub',fireworksTextureSub);
 	const fireworksGeometry = new THREE.BufferGeometry();
 	const vertices = new Float32Array([0, 0, 0]);
 	fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
