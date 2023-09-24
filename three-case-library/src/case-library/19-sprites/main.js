@@ -662,8 +662,8 @@ async function FireworksSystem() {
 	fireworksParticle = new THREE.Points(fireworksGeometry, fireworksMaterial);
 	await new Promise((resolve, reject) => {
 		setTimeout(function () {
-			scene.add(fireworksParticle);
 			fireworksParticle.position.set(explosionePosition.x, explosionePosition.y, explosionePosition.z);
+			scene.add(fireworksParticle);
 			setTimeout(() => {
 				scene.remove(fireworksParticle);
 			}, sheetDuration * 1000);

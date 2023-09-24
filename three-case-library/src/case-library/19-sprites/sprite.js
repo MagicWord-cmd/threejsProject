@@ -1,7 +1,9 @@
 
 import * as THREE from 'three';
-import Proton from 'three.proton.js';
-
+import Proton, { log } from 'three.proton.js';
+/*    sprite要用的的引入    */
+import { timerLocal, spritesheetUV, pointUV, vec2, texture, PointsNodeMaterial, SpriteNodeMaterial,TextureNode} from 'three/nodes';
+import { nodeFrame } from 'three/addons/renderers/webgl/nodes/WebGLNodes.js';
 
 var proton, emitter;
 var camera, scene, renderer, clock;
@@ -51,14 +53,76 @@ function initProton() {
 }
 
 function createSprite() {
+    const fireworksMaps = [
+        'T_SS(4x4)_fireworks001',
+        'T_SS(4x4)_fireworks002',
+        'T_SS(4x4)_fireworks003',
+        'T_SS(5x4)_fireworks001',
+        'T_SS(5x4)_fireworks002',
+        'T_SS(5x4)_fireworks003',
+        'T_SS(5x4)_fireworks004',
+        'T_SS(5x4)_fireworks005',
+        'T_SS(5x4)_fireworks006',
+        'T_SS(5x4)_fireworks007',
+        'T_SS(5x5)_fireworks001',
+        'T_SS(5x5)_fireworks002',
+        'T_SS(5x5)_fireworks003',
+        'T_SS(5x5)_fireworks004',
+        'T_SS(5x5)_fireworks005',
+        'T_SS(5x5)_fireworks006',
+        'T_SS(6x5)_fireworks001',
+    ];
+    //随机加载一张图片，并根据图片名称识别图片矩阵数
+    const texName = fireworksMaps[parseInt(Math.random() * fireworksMaps.length)];
+    const fireworksMap = new THREE.TextureLoader().load('/textures/sprites/fireworks/' + texName + '.jpg');
+    const sheetU = Number(texName.substring(5, 6));
+    const sheetV = Number(texName.substring(7, 8));
+
+    // 烟花播放帧数率
+    const sheetFPS = Math.random() * 5 + 10;
+
+    //todo 图片矩阵总数除以每秒切换张数，就是烟花的播放时长，之后用来控制烟花销毁时机
+    const sheetDuration = sheetU * sheetV / sheetFPS;
+
+    const time = timerLocal();
+    const fireworksUV = spritesheetUV(
+        vec2(sheetU, sheetV), // count
+        pointUV, // uv
+        time.mul(sheetFPS) // current frame
+    );
+
+    const fireworksTextureSub = texture(fireworksMap, fireworksUV);
+    // const fireworksColorNode = fireworksTextureSub.mul(1);	//亮度
+    const fireworksMaterial = new SpriteNodeMaterial({
+        // depthWrite: false,
+        // transparent: true,
+        // sizeAttenuation: true,
+        // blending: 1,
+        color: 0xffffff,
+        // colorNode: fireworksTextureSub,
+        // // opacityNode: fireworksColorNode,
+        // // size: Math.random() * 3 + 10
+    });
+    console.log('fireworksUV', fireworksUV);
+    console.log('fireworksTextureSub', fireworksTextureSub);
+    console.log('fireworksMaterial', fireworksMaterial);
+    const fireworksGeometry = new THREE.BufferGeometry();
+    const vertices = new Float32Array([0, 0, 0]);
+    fireworksGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    const fireworksParticle = new THREE.Sprite(fireworksMaterial);
+    console.log('fireworksParticle',fireworksParticle);
+
     var map = new THREE.TextureLoader().load("/textures/sprites/disc.png");
     var material = new THREE.SpriteMaterial({
-        map: map,
+        map: fireworksMap,
         color: 0xffffff,
         blending: THREE.AdditiveBlending,
         fog: true
     });
-    return new THREE.Sprite(material);
+    console.log('material', material);
+    // return new THREE.Sprite(material);
+    return new THREE.Sprite(fireworksMaterial);
+
 }
 
 
@@ -69,7 +133,7 @@ function createEmitter() {
     emitter.rate = new Proton.Rate(new Proton.Span(1, 1.5), new Proton.Span(0.25, 0.5));
 
     // emitter.addInitialize(new Proton.Mass(1));
-    // emitter.addInitialize(new Proton.Radius(50));
+    emitter.addInitialize(new Proton.Radius(100));
     emitter.addInitialize(new Proton.Life(1.5, 2));
     emitter.addInitialize(new Proton.Body(createSprite()));
     emitter.addInitialize(new Proton.Position(new Proton.BoxZone(100)));
@@ -92,7 +156,7 @@ function createEmitter() {
 
     emitter.emit();
     // emitter.emit('once');
-    
+
     console.log(' emitter', emitter);
     return emitter;
 }
@@ -104,6 +168,8 @@ function animate() {
 }
 console.log('proton', proton);
 function render() {
+    //! 更新nodeFrame贴图动画才有效果
+    nodeFrame.update();
     proton.update();
     renderer.render(scene, camera);
 
@@ -111,6 +177,8 @@ function render() {
     // tha += .02;
     // camera.position.x = Math.sin(tha) * 500;
     // camera.position.z = Math.cos(tha) * 500;
+
+
 }
 
 function onWindowResize() {
