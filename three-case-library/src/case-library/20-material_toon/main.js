@@ -16,10 +16,13 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
+import { LightProbeHelper } from 'three/addons/helpers/LightProbeHelper.js';
+import { LightProbeGenerator } from 'three/addons/lights/LightProbeGenerator.js';
 
 
-let renderer, camera, stats, controls, effect;
+let renderer, camera, stats, controls, effect, cubeCamera;
 let actions = [];
+let lightProbe;
 
 let scene = new THREE.Scene();
 
@@ -61,7 +64,7 @@ gltfLoader.load('character.glb',
                 object.receiveShadow = true;
                 //!遍历gltf,为每个物体设置贴图的色彩空间以得到正确的PBR物理材质效果
                 const stagingMaterial = object.material;
-                // console.log('stagingMaterial', stagingMaterial.alphaTest);
+                console.log('stagingMaterial', stagingMaterial);
                 object.material = new THREE.MeshToonMaterial();
 
                 //alphaTest
@@ -132,44 +135,6 @@ gltfLoader.load('character.glb',
         let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
 
 
-        // //加载动画
-        // let loadedAnimations = gltf.animations;
-        // let mixer = new THREE.AnimationMixer(model);
-        // //todo先用AnimationMixer.clipAction实例化AnimationAction，因为这个方法提供了缓存以提高性能。
-        // // idleAction = mixer.clipAction(animations[0]);
-        // // walkAction = mixer.clipAction(animations[1]);
-        // // backWalkAction = mixer.clipAction(animations[2]);
-        // // runAction = mixer.clipAction(animations[3]);
-        // // backRunAction = mixer.clipAction(animations[4]);
-        // // leftWalkAction = mixer.clipAction(animations[5]);
-        // // rightWalkAction = mixer.clipAction(animations[7]);
-        // // leftRunAction = mixer.clipAction(animations[6]);
-        // // rightRunAction = mixer.clipAction(animations[8]);
-        // // jumpAction = mixer.clipAction(animations[9]);
-        // // fallingAction = mixer.clipAction(animations[10]);
-        // // landingAction = mixer.clipAction(animations[11]);
-
-        // let numAnimations = loadedAnimations.length;
-    
-        
-        // for (let i = 0; i < numAnimations; ++i) {
-    
-        //     let clip = loadedAnimations[i];
-        //     const clipName = clip.name;
-        //     const action = mixer.clipAction(clip);
-        //     actions.push(action)
-        // }
-    
-       
-
-        // //设置动画混合的初始权重
-        // for (let i = 0; i < actions.length; i++) {
-        //     actions[i].weight = 0
-        // }
-        // actions[0].weight = 1;
-        // // actions[0].play();
-        
-
         //todo 闭包函数，向外传输局部变量
         let closure = function () {
             return {
@@ -179,7 +144,7 @@ gltfLoader.load('character.glb',
                 'box3Center': box3Center,
                 'vector3': vector3,
                 'model': model,
-                'actions':actions
+                'actions': actions
             };
 
         }
@@ -251,7 +216,7 @@ function init(closured) {
     renderer.toneMapping = 3;
 
     //!设置toneMapping曝光度
-    renderer.toneMappingExposure = 0.15;
+    renderer.toneMappingExposure = 0.2;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.VSMShadowMap;
 
@@ -259,7 +224,7 @@ function init(closured) {
 
 
     effect = new OutlineEffect(renderer);
-    console.log('effect', effect);
+
     //controls
     //创建一个轨道控制器控件
     controls = new OrbitControls(camera, renderer.domElement);
@@ -284,8 +249,13 @@ function init(closured) {
     plane.position.y = -0.05;
     plane.castShadow = true;
     plane.receiveShadow = true;
-
+    const cubeGeometry = new THREE.BoxGeometry(0.1,2, 1);
+    const material2 = new THREE.MeshToonMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(cubeGeometry, material2);
+    cube.position.set(-1, 0.5, 0);
+    scene.add(cube);
     scene.add(plane);
+    
 
     const directionalLight = new THREE.DirectionalLight(0x6677aa, 7.5);
     directionalLight.position.z = 5;
@@ -307,7 +277,17 @@ function init(closured) {
     const light = new THREE.HemisphereLight(0x222233, 0x000000, 5);
     scene.add(light);
 
-
+    // probe
+    lightProbe = new THREE.LightProbe();
+    const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
+    cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
+    scene.add(lightProbe);
+    
+    cubeCamera.update(renderer, scene);
+    lightProbe.copy(LightProbeGenerator.fromCubeRenderTarget(renderer, cubeRenderTarget));
+    lightProbe.intensity = 100;
+    let lightProbeHelper = new LightProbeHelper(lightProbe, 0.25);
+    scene.add(lightProbeHelper);
 
     //!动态设置controls的可控范围
     controls.maxPolarAngle = Math.PI * 2;
@@ -426,12 +406,12 @@ function init(closured) {
 
 }
 
-// scene.background  GUI
-const params2 = {
-    color: "#221e33)",
-};
-gui
-    .addColor(params2, "color")
-    .name("background")
-    .onChange((value) => { scene.background.set(value); });
+// // scene.background  GUI
+// const params2 = {
+//     color: "#221e33)",
+// };
+// gui
+//     .addColor(params2, "color")
+//     .name("background")
+//     .onChange((value) => { scene.background.set(value); });
 
