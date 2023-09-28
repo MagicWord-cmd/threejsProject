@@ -19,3 +19,16 @@ threejs 开发总结：
     3.orbitControls 控制的是 camera(eyes)
 
   https://www.npmjs.com/package/three.proton.js
+
+  5.项目“main.ts” 文件中 “import App from ‘./App.vue’” 部分有红色报错提示
+
+    报错原因：vite使用的是ts，ts不识别 .vue 后缀的文件
+    解决方法：
+    创建vite项目后，项目根目录会有一个 “env.d.ts” 文件，找到该文件，在里面添加一下代码：
+    declare module "*.vue" {
+        import { DefineComponent } from "vue"
+        const component: DefineComponent<{}, {}, any>
+        export default component
+    }
+原文链接：https://blog.csdn.net/qq_39111074/article/details/129489155
+================================================================================

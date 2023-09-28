@@ -219,6 +219,8 @@ function init(closured) {
     controls.maxPolarAngle = Math.PI * 2;
     controls.minDistance = obj.maxBox3Size / 5;
     controls.maxDistance = obj.maxBox3Size * 5;
+    
+
 
 
     //todo 添加后期bloom光晕
