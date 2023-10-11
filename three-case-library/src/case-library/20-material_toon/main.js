@@ -82,7 +82,7 @@ gltfLoader.load('character.glb',
 
                     object.material.emissiveIntensity = params.emissiveMultiply;
                     if (object.material.emissiveMap) {
-                        object.material.emissiveMap = stagingMaterial.emissiveMap;
+                        object.material.emissiveMap = stagingMaterial.map;
                         object.material.emissiveMap.colorSpace = THREE.SRGBColorSpace;
                     }
                 }
@@ -249,11 +249,11 @@ function init(closured) {
     plane.position.y = -0.05;
     plane.castShadow = true;
     plane.receiveShadow = true;
-    const cubeGeometry = new THREE.BoxGeometry(0.1,2, 1);
-    const material2 = new THREE.MeshToonMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(cubeGeometry, material2);
-    cube.position.set(-1, 0.5, 0);
-    scene.add(cube);
+    // const cubeGeometry = new THREE.BoxGeometry(0.1,2, 1);
+    // const material2 = new THREE.MeshToonMaterial({ color: 0x00ff00 });
+    // const cube = new THREE.Mesh(cubeGeometry, material2);
+    // cube.position.set(-1, 0.5, 0);
+    // scene.add(cube);
     scene.add(plane);
     
 
@@ -271,23 +271,22 @@ function init(closured) {
     directionalLight.shadow.bias = 0.0004;
 
     directionalLight.shadow.mapSize.set(512, 512);
-    console.log('directionalLight.shadow', directionalLight.shadow);
     scene.add(directionalLight);
 
     const light = new THREE.HemisphereLight(0x222233, 0x000000, 5);
     scene.add(light);
 
-    // probe
-    lightProbe = new THREE.LightProbe();
-    const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
-    cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
-    scene.add(lightProbe);
+    // // probe
+    // lightProbe = new THREE.LightProbe();
+    // const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
+    // cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
+    // scene.add(lightProbe);
     
-    cubeCamera.update(renderer, scene);
-    lightProbe.copy(LightProbeGenerator.fromCubeRenderTarget(renderer, cubeRenderTarget));
-    lightProbe.intensity = 100;
-    let lightProbeHelper = new LightProbeHelper(lightProbe, 0.25);
-    scene.add(lightProbeHelper);
+    // cubeCamera.update(renderer, scene);
+    // lightProbe.copy(LightProbeGenerator.fromCubeRenderTarget(renderer, cubeRenderTarget));
+    // lightProbe.intensity = 100;
+    // let lightProbeHelper = new LightProbeHelper(lightProbe, 0.25);
+    // scene.add(lightProbeHelper);
 
     //!动态设置controls的可控范围
     controls.maxPolarAngle = Math.PI * 2;

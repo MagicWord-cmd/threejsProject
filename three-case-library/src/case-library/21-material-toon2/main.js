@@ -179,18 +179,18 @@ function init() {
 	directionalLight.shadow.mapSize.set(1024, 1024);
 	scene.add(directionalLight);
 
-	// lightProbe
-    lightProbe = new THREE.LightProbe();
-    const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
-    cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
-	cubeCamera.position.set(1,1,1);
-    scene.add(lightProbe);
+	// // lightProbe
+    // lightProbe = new THREE.LightProbe();
+    // const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
+    // cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
+	// cubeCamera.position.set(1,1,1);
+    // scene.add(lightProbe);
     
-    cubeCamera.update(renderer, scene);
-    lightProbe.copy(LightProbeGenerator.fromCubeRenderTarget(renderer, cubeRenderTarget));
-    lightProbe.intensity = 100;
-    let lightProbeHelper = new LightProbeHelper(lightProbe, 0.25);
-    scene.add(lightProbeHelper);
+    // cubeCamera.update(renderer, scene);
+    // lightProbe.copy(LightProbeGenerator.fromCubeRenderTarget(renderer, cubeRenderTarget));
+    // lightProbe.intensity = 100;
+    // let lightProbeHelper = new LightProbeHelper(lightProbe, 0.25);
+    // scene.add(lightProbeHelper);
 
 	const cubeGeometry = new THREE.BoxGeometry(0.1,2, 1);
     const material2 = new THREE.MeshToonMaterial({ color: 0x00ff00 });
