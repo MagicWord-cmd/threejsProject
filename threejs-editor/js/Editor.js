@@ -1,8 +1,14 @@
 import * as THREE from 'three';
 
+//全局配置
 import { Config } from './Config.js';
+//加载器
 import { Loader } from './Loader.js';
+
+//历史记录
 import { History as _History } from './History.js';
+
+
 import { Strings } from './Strings.js';
 import { Storage as _Storage } from './Storage.js';
 import { Selector } from './Viewport.Selector.js';

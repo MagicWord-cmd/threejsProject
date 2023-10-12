@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@parcel/transformer-glsl": "^2.10.0",
+    "gsap": "^3.12.2",
+    "parcel": "^2.10.0",
     "three": "^0.152.2",
     "three.proton": "^1.0.1",
     "three.proton.js": "^0.2.3",
