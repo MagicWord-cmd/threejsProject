@@ -18,7 +18,10 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { SSRPass } from 'three/addons/postprocessing/SSRPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
-import { ReflectorForSSRPass } from 'three/addons/objects/ReflectorForSSRPass.js';
+
+// KTX2Loader
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 
 let renderer, camera, stats, controls;
@@ -45,111 +48,135 @@ const params = {
 };
 
 
+//renderer
+renderer = new THREE.WebGLRenderer({ antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+renderer.colorSpace = THREE.SRGBColorSpace;
+
+//!toneMapping能够塑造更真实的物理效果
+renderer.toneMapping = THREE.LinearToneMapping;
+
+//!设置toneMapping曝光度
+renderer.toneMappingExposure = 1;
+
+document.body.appendChild(renderer.domElement);
+
+//! 设置当前屏幕像素比，以解决不同设备抗锯齿模糊程度不同的问题，此设置需要在添加到document之后
+renderer.setPixelRatio(window.devicePixelRatio);
+
 
 //gltfLoader
-const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
-gltfLoader.load('数字阅读.glb',
+let ktx2Loader = new KTX2Loader()
+    .setTranscoderPath('./basis/')
+    .detectSupport( renderer );
 
-    //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
-    gltf => {
+const gltfLoader = new GLTFLoader().setPath('/models/gltf/reading/')
+gltfLoader.setKTX2Loader(ktx2Loader)
+    .setMeshoptDecoder(MeshoptDecoder)
+    .load('reading.gltf',
 
-        console.log(gltf.scene);
-        model = gltf.scene;
-        scene.add(model);
+        //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
+        gltf => {
 
-        model.traverse(function (object) {
+            console.log(gltf.scene);
+            model = gltf.scene;
+            scene.add(model);
 
-            if (object.isMesh) {
-                //!遍历gltf,为每个物体设置贴图的色彩空间以得到正确的PBR物理材质效果
-                //map
-                if (object.material.map) {
-                    object.material.map.colorSpace = THREE.SRGBColorSpace;
+            model.traverse(function (object) {
+
+                if (object.isMesh) {
+                    //!遍历gltf,为每个物体设置贴图的色彩空间以得到正确的PBR物理材质效果
+                    //map
+                    if (object.material.map) {
+                        object.material.map.colorSpace = THREE.SRGBColorSpace;
+                    }
+
+                    //lightMap
+                    if (object.material.clearcoatMap) {
+                        object.material.clearcoatMap.colorSpace = THREE.SRGBColorSpace;
+
+                        //todo 拷贝emissiveMap赋值于lightMap，并设置lightMapIntensity和envMapIntensity的值。
+                        object.material.lightMap = object.material.clearcoatMap.clone();
+                        object.material.clearcoatMap = null;
+                        object.material.clearcoatRoughness = 1;
+                        object.material.lightMapIntensity = 1;
+                        object.material.envMapIntensity = 0.5;
+                    }
+                    else { object.material.envMapIntensity = 3 }   //todo 若无lightMap贴图需要配置，需要适当提高envMapIntensity，以免材质太暗
+
+                    //emissiveMap
+                    if (object.material.emissiveMap) {
+                        object.material.emissiveMap.colorSpace = THREE.SRGBColorSpace;
+                    }
+                    //aoMap
+                    if (object.material.aoMap) {
+                        object.material.aoMap.colorSpace = THREE.NoColorSpace;
+                        object.material.aoMapIntensity = 0.65;
+                    }
+                    //metalnessMap
+                    if (object.material.metalnessMap) {
+                        object.material.metalnessMap.colorSpace = THREE.NoColorSpace;
+                    }
+                    //roughnessMap
+                    if (object.material.roughnessMap) {
+                        object.material.roughnessMap.colorSpace = THREE.NoColorSpace;
+                    }
+
+                    // material.roughness <= 0.1的物体参与计算ssr
+                    if (object.material.roughness <= 0.2) {
+                        ssrFilter.push(object);
+                    }
+                    //normalMap
+                    if (object.material.normalMap) {
+                        object.material.normalMap.colorSpace = THREE.NoColorSpace;
+                        object.material.normalScale = new THREE.Vector2(1, -1);    //!法线强度
+                    }
+
                 }
 
-                //lightMap
-                if (object.material.clearcoatMap) {
-                    object.material.clearcoatMap.colorSpace = THREE.SRGBColorSpace;
+            });
 
-                    //todo 拷贝emissiveMap赋值于lightMap，并设置lightMapIntensity和envMapIntensity的值。
-                    object.material.lightMap = object.material.clearcoatMap.clone();
-                    object.material.clearcoatMap = null;
-                    object.material.clearcoatRoughness = 1;
-                    object.material.lightMapIntensity = 1;
-                    object.material.envMapIntensity = 0.5;
-                }
-                else { object.material.envMapIntensity = 3 }   //todo 若无lightMap贴图需要配置，需要适当提高envMapIntensity，以免材质太暗
 
-                //emissiveMap
-                if (object.material.emissiveMap) {
-                    object.material.emissiveMap.colorSpace = THREE.SRGBColorSpace;
-                }
-                //aoMap
-                if (object.material.aoMap) {
-                    object.material.aoMap.colorSpace = THREE.NoColorSpace;
-                    object.material.aoMapIntensity = 0.65;
-                }
-                //metalnessMap
-                if (object.material.metalnessMap) {
-                    object.material.metalnessMap.colorSpace = THREE.NoColorSpace;
-                }
-                //roughnessMap
-                if (object.material.roughnessMap) {
-                    object.material.roughnessMap.colorSpace = THREE.NoColorSpace;
-                }
 
-                // material.roughness <= 0.1的物体参与计算ssr
-                if (object.material.roughness <= 0.2) {
-                    ssrFilter.push(object);
-                }
-                //normalMap
-                if (object.material.normalMap) {
-                    object.material.normalMap.colorSpace = THREE.NoColorSpace;
-                    object.material.normalScale = new THREE.Vector2(1, -1);    //!法线强度
-                }
+
+
+
+            //todo Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值
+            let box3 = new THREE.Box3();
+            let vector3 = new THREE.Vector3;
+            let box3Center = new THREE.Vector3;
+            box3.expandByObject(gltf.scene);
+            console.log(box3);
+            box3.getSize(vector3);
+            console.log(vector3);
+            box3.getCenter(box3Center);
+            console.log(box3Center);
+
+            //todo 获取包围盒尺寸的最小值
+            let minBox3Size = Math.min(vector3.x, vector3.y, vector3.z);
+            console.log(minBox3Size);
+
+            //todo 获取包围盒尺寸的最大值
+            let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
+            console.log(maxBox3Size);
+            //todo 闭包函数，向外传输局部变量
+            let closure = function () {
+                return {
+
+                    'minBox3Size': minBox3Size,
+                    'maxBox3Size': maxBox3Size,
+                    'box3Center': box3Center,
+                    'vector3': vector3,
+                    'model': model,
+                    'ssrFilter': ssrFilter
+                };
 
             }
+            init(closure);
 
         });
-
-
-
-
-
-
-        //todo Box3,三维包围盒，用于获取物体的最外围尺寸并取出最大值
-        let box3 = new THREE.Box3();
-        let vector3 = new THREE.Vector3;
-        let box3Center = new THREE.Vector3;
-        box3.expandByObject(gltf.scene);
-        console.log(box3);
-        box3.getSize(vector3);
-        console.log(vector3);
-        box3.getCenter(box3Center);
-        console.log(box3Center);
-
-        //todo 获取包围盒尺寸的最小值
-        let minBox3Size = Math.min(vector3.x, vector3.y, vector3.z);
-        console.log(minBox3Size);
-
-        //todo 获取包围盒尺寸的最大值
-        let maxBox3Size = Math.max(vector3.x, vector3.y, vector3.z);;
-        console.log(maxBox3Size);
-        //todo 闭包函数，向外传输局部变量
-        let closure = function () {
-            return {
-
-                'minBox3Size': minBox3Size,
-                'maxBox3Size': maxBox3Size,
-                'box3Center': box3Center,
-                'vector3': vector3,
-                'model': model,
-                'ssrFilter': ssrFilter
-            };
-
-        }
-        init(closure);
-
-    });
 
 
 //init
@@ -201,23 +228,7 @@ function init(closured) {
     // });
 
 
-    //renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    renderer.colorSpace = THREE.SRGBColorSpace;
-
-    //!toneMapping能够塑造更真实的物理效果
-    renderer.toneMapping = THREE.LinearToneMapping;
-
-    //!设置toneMapping曝光度
-    renderer.toneMappingExposure = 1;
-
-    document.body.appendChild(renderer.domElement);
-    
-    //! 设置当前屏幕像素比，以解决不同设备抗锯齿模糊程度不同的问题，此设置需要在添加到document之后
-    renderer.setPixelRatio(window.devicePixelRatio);
 
     //controls
     //创建一个轨道控制器控件
@@ -241,7 +252,7 @@ function init(closured) {
     //!动态设置controls的可控范围
     controls.maxPolarAngle = Math.PI * 2;
     controls.minDistance = obj.maxBox3Size / 10;
-    controls.maxDistance = obj.maxBox3Size ;
+    controls.maxDistance = obj.maxBox3Size;
 
 
     //todo 添加后期bloom光晕
@@ -328,7 +339,7 @@ function init(closured) {
     }
 
     animate()
-
+    console.log('renderer.info', renderer.info);
 
     //渲染器toneMapping模式gui
     gui
