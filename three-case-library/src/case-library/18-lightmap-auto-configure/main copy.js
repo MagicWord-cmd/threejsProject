@@ -70,7 +70,7 @@ gltfLoader.load('reading_512.glb',
                 if (object.material.clearcoatMap) {
                     object.material.clearcoatMap.colorSpace = THREE.SRGBColorSpace;
 
-                    //todo 拷贝emissiveMap赋值于lightMap，并设置lightMapIntensity和envMapIntensity的值。
+                    //todo 拷贝clearcoatMap赋值于lightMap，并设置lightMapIntensity和envMapIntensity的值。
                     object.material.lightMap = object.material.clearcoatMap.clone();
                     object.material.clearcoatMap = null;
                     object.material.clearcoatRoughness = 1;
