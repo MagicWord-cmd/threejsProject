@@ -48,7 +48,7 @@ const params = {
 
 //gltfLoader
 const gltfLoader = new GLTFLoader().setPath('/models/gltf/');
-gltfLoader.load('数字阅读.glb',
+gltfLoader.load('reading_512.glb',
 
     //!所有的匿名函数都可以写成箭头函数（onLoad完成开始执行）
     gltf => {
