@@ -254,24 +254,24 @@ function init(closured) {
     composer.addPass(renderScene);
     composer.addPass(bloomPass);
 
-    //todo 添加ssr屏幕空间反射效果
-    let ssrPass = new SSRPass({
-        renderer,
-        scene,
-        camera,
-        width: innerWidth,
-        height: innerHeight,
-    });
-    ssrPass.selects = obj.ssrFilter;
-    ssrPass.maxDistance = 1.5,
-        ssrPass.distanceAttenuation = true;
-    ssrPass.opacity = 0.25;
-    ssrPass.thickness = 0.008;
-    ssrPass.fresnel = true;
-    ssrPass.bouncing = false;
-    ssrPass.blur = true;
-    composer.addPass(ssrPass);
-    composer.addPass(new ShaderPass(GammaCorrectionShader));
+    // //todo 添加ssr屏幕空间反射效果
+    // let ssrPass = new SSRPass({
+    //     renderer,
+    //     scene,
+    //     camera,
+    //     width: innerWidth,
+    //     height: innerHeight,
+    // });
+    // ssrPass.selects = obj.ssrFilter;
+    // ssrPass.maxDistance = 1.5,
+    //     ssrPass.distanceAttenuation = true;
+    // ssrPass.opacity = 0.25;
+    // ssrPass.thickness = 0.008;
+    // ssrPass.fresnel = true;
+    // ssrPass.bouncing = false;
+    // ssrPass.blur = true;
+    // composer.addPass(ssrPass);
+    // composer.addPass(new ShaderPass(GammaCorrectionShader));
 
 
     //todo CubeCamera捕获场景envMap，为场景提供较真实反射贴图
