@@ -277,6 +277,7 @@ function init(closured) {
     //todo CubeCamera捕获场景envMap，为场景提供较真实反射贴图
     let cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
     cubeRenderTarget.texture.type = THREE.HalfFloatType;
+    // cubeRenderTarget.texture.needsUpdate = false;
 
     cubeCamera = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
     cubeCamera.position.copy(camera.position);
